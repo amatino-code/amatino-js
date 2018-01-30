@@ -110,5 +110,33 @@ class Transaction {
 			this._new_tx_args == null;
 			this._id = transaction_id;
 		}
+		
+		return;
+	}
+	
+	_create() {
+		return;
+	}
+	
+	_retrieve() {
+		return;
+	}
+	
+	update(
+		transactionTime,
+		description,
+		globalUnit,
+		customUnit,
+		entries
+	) {
+		return;
+	}
+	
+	delete_tx() {
+		return;
+	}
+	
+	restore() {
+		return;
 	}
 }
