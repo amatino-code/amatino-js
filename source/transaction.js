@@ -58,11 +58,11 @@ class Transaction {
 		entity,
 		completion,
 		transactionId,
-		transactionTime,
-		description,
-		globalUnit,
-		customUnit,
-		entries
+		transactionTime = null,
+		description = null,
+		globalUnit = null,
+		customUnit = null,
+		entries = null
 	){
 
 		if (
@@ -85,14 +85,13 @@ class Transaction {
 		if (
 			transaction_id == null
 			&& (
-				transactionTime == undefined
-				|| transactionTime == null
-				|| description == undefined
+				transactionTime == null
 				|| description == null
-				|| globalUnit == undefined
-				|| customUnit == null
-				|| entries == undefined
 				|| entries == null
+				|| (
+					customUnit == null
+					&& globalUnit == null
+				)
 			) 
 		) {
 			throw Error(TX_NEW_REQUIRED_ARGS);
