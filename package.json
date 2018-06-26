@@ -1,10 +1,10 @@
 {
   "name": "amatino",
   "version": "0.0.1",
-  "description": "Javascript bindings library for the Amatino API",
+  "description": "Javascript Node.js bindings library for the Amatino API - Double entry accounting as a service",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No Amatino tests yet available\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   "keywords": [
     "accounting","api","amatino","double entry"
   ],
-  "author": "hugh@blinkybeach.com",
+  "author": "hugh@amatino.io",
   "license": "",
   "bugs": {
     "url": "https://github.com/Amatino-Code/amatino-js/issues"
