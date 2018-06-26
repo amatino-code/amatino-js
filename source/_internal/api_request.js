@@ -6,7 +6,7 @@
  */
  
  const HTTPS = require('https');
- const NO_SESSION_PATHS = ['sessions];
+ const NO_SESSION_PATHS = ['sessions'];
  const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
  const HTTPS = require('https');
  const API_HOSTNAME = 'api.amatino.io';
