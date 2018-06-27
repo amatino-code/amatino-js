@@ -41,17 +41,17 @@
     if (urlParameters === null) {
       const fullPath = path;
     } else {
-      const fullPath = path + urlParameters.queryString();
+      const fullPath = path + urlParameters;
     }
 
     const headers = this._buildHeaders(session, bodyData, path);
     
     const requestOptions = {
-      'hostname': API_HOSTNAME
-      ,'method': method,
-      ,'path': path + urlParameters
-      ,'headers': headers
-      ,'timeout': TIMEOUT_MILLISECONDS
+      'hostname': API_HOSTNAME,
+      'method': method,
+      'path': path + urlParameters,
+      'headers': headers,
+      'timeout': TIMEOUT_MILLISECONDS
     }
     
     const request = HTTPS.request(requestOptions, (response) => {
