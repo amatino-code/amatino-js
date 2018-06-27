@@ -62,7 +62,7 @@ For more examples of `AmatinoAlpha` usage, see the [getting started guide](https
 
 ## Tell us what your think/want/like/hate
 
-Please join us on the Amatino discussion forums and give us your feedback. We would love to hear from you. Amatino is in its earliest stages of development, and your feedback will influence the direction it moves in.
+Please join us on the [Amatino discussion forums and give us your feedback. We would love to hear from you. Amatino is in its earliest stages of development, and your feedback will influence the direction it moves in.
 
 Pull requests, comments, issues, forking, and so on are also most welcome here on Github.
 
