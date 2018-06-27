@@ -34,8 +34,8 @@ Initialise an  `AmatinoAlpha` instance like so:
 require('amatino');
 
 const amatinoAlpha = new AmatinoAlpha(
-	'clever@cookie.com',
-	'high entropy passphrase'
+  'clever@cookie.com',
+  'high entropy passphrase'
 );
 ````
 
@@ -43,14 +43,14 @@ Request may then be made like so:
 
 ````
 const myFirstEntity = amatinoAlpha.request(
-	'/entities',
-	'POST',
-	null,
-	[{
-		'name': 'My First Entity',
+  '/entities',
+  'POST',
+  null,
+  [{
+    'name': 'My First Entity',
 		'description: null,
 		'region_id': null
-	}]
+  }]
 )[0];
 ````
 
