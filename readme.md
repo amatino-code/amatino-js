@@ -48,8 +48,8 @@ const myFirstEntity = amatinoAlpha.request(
   null,
   [{
     'name': 'My First Entity',
-		'description: null,
-		'region_id': null
+    'description: null,
+    'region_id': null
   }]
 )[0];
 ````
