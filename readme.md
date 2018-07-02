@@ -33,16 +33,19 @@ Initialise an  `AmatinoAlpha` instance like so:
 ````
 require('amatino');
 
-const amatinoAlpha = new AmatinoAlpha(
+let _ = new AmatinoAlpha(
   'clever@cookie.com',
-  'high entropy passphrase'
+  'high entropy passphrase',
+  (error, amatinoAlpha) => {
+    // Do stuff with amatinoAlpha
+  }
 );
 ````
 
 Request may then be made like so:
 
 ````
-const myFirstEntity = amatinoAlpha.request(
+let _ = amatinoAlpha.request(
   '/entities',
   'POST',
   null,
@@ -50,8 +53,12 @@ const myFirstEntity = amatinoAlpha.request(
     'name': 'My First Entity',
     'description: null,
     'region_id': null
-  }]
-)[0];
+  }],
+  (error, responseData) => {
+    const newEntity = responseData[0];
+    // Do stuff with newEntity
+  }
+);
 ````
 
 Wherein the parameters passed to `request()` are the HTTP path, method, url parameters ('query string'),  and body laid out in the Amatino API HTTP documentation.
