@@ -4,15 +4,15 @@ Amatino is a double-entry accounting system. It provides double entry accounting
 
 ## About Amatino
 
-Amatino allows you to store, organise and retrieve financial information. You don't need to set up databases or write any of your own double-entry accounting logic. All you need is this library, an Amatino account, and you are off and running.
+Amatino gives you a full set of tools to store, organise and retrieve financial information. You don't need to set up databases or write any of your own double-entry accounting logic. All you need is this library, an [Amatino account (Try free for two weeks!)](https://amatino.io/subscribe), and you are off and running.
 
 ## Under construction
 
-Right now, the Amatino API pffers a full range of accounting services via HTTP requests. However, this Amatino JS library is in an 'Alpha' state. Its capabilities are limited. One class is available: `AmatinoAlpha`.
+Right now, the Amatino API offers a full range of accounting services via HTTP requests. However, this Amatino JS library is in an 'Alpha' state. Its capabilities are limited. One class is available: `AmatinoAlpha`.
 
 `AmatinoAlpha` is a thin wrapper around asynchronous HTTP requests to the Amatino API. It facilitates testing and experimentation with the Amatino API without having to resort to raw HTTP request manipulation and HMAC computation.
 
-Amatino JS will eventually offer expressive, object-oriented interfaces for all Amatino API services. To be notified when Amatino JS enters a Beta state, with all capabilities available, sign up to the [Amatino Development Newsletter.](https://amatino.io/newsletter).
+Amatino JS will eventually offer expressive, object-oriented interfaces for all Amatino API services. To be notified when Amatino JS enters a Beta state, with all capabilities available, sign up to the [Amatino Development Newsletter](https://amatino.io/newsletter).
 
 In the mean time, you may wish to review [Amatino's HTTP documentation](https://amatino.io/documentation) to see what capabilities you can expect from Amatino JS in the future.
 
