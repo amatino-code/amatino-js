@@ -11,12 +11,14 @@
     "url": "git+https://github.com/Amatino-Code/amatino-js.git"
   },
   "keywords": [
-    "accounting","api","amatino","double entry"
+    "accounting","api","amatino","double entry", "amatino api",
+    "double entry accounting","accounting library",
+    "amatino javascript","amatino npm"
   ],
   "author": "hugh@amatino.io",
   "license": "",
   "bugs": {
     "url": "https://github.com/Amatino-Code/amatino-js/issues"
   },
-  "homepage": "https://github.com/Amatino-Code/amatino-js#readme"
+  "homepage": "https://github.com/Amatino-Code/amatino-js"
 }

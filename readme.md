@@ -2,11 +2,13 @@
 
 Amatino is a double-entry accounting system. It provides double entry accounting as a service via an HTTP API. Amatino JS is a library for interacting with the Amatino API from within a Node.js application. By using Amatino JS, a Node.js developer can utilise Amatino services without needing to deal with raw HTTP requests.
 
+## About Amatino
+
+Amatino allows you to store, organise and retrieve financial information. You don't need to set up databases or write any of your own double-entry accounting logic. All you need is this library, an Amatino account, and you are off and running.
+
 ## Under construction
 
-Amatino JS is in an Alpha state. It is not yet ready for widespread use and should not be used by anyone for anything important. 
-
-Right now, the Amatino API offers a full range of accounting services via HTTP requests. However, the Amatino JS library's capabilities are limited. There is one class available: `AmatinoAlpha`. 
+Right now, the Amatino API pffers a full range of accounting services via HTTP requests. However, this Amatino JS library is in an 'Alpha' state. Its capabilities are limited. One class is available: `AmatinoAlpha`.
 
 `AmatinoAlpha` is a thin wrapper around asynchronous HTTP requests to the Amatino API. It facilitates testing and experimentation with the Amatino API without having to resort to raw HTTP request manipulation and HMAC computation.
 
@@ -30,7 +32,7 @@ The ````AmatinoAlpha```` object allows you to use the Amatino API without dealin
 
 Initialise an  `AmatinoAlpha` instance like so:
 
-````
+````javascript
 require('amatino');
 
 let _ = new AmatinoAlpha(
@@ -44,7 +46,7 @@ let _ = new AmatinoAlpha(
 
 Request may then be made like so:
 
-````
+````javascript
 let _ = amatinoAlpha.request(
   '/entities',
   'POST',
@@ -61,7 +63,7 @@ let _ = amatinoAlpha.request(
 );
 ````
 
-Wherein the parameters passed to `request()` are the HTTP path, method, url parameters ('query string'),  and body laid out in the Amatino API HTTP documentation.
+Wherein the parameters passed to `request()` are the HTTP path, method, url parameters ('query string'),  and body laid out in the [Amatino API HTTP documentation](https://amatino.io/documentation).
 
 For example, the above request created an [Entity](https://amatino.io/documentation/entities). The requirements for Entity creation are available at https://amatino.io/documentation/entities#action-Create.
 
@@ -71,7 +73,7 @@ For more examples of `AmatinoAlpha` usage, see the [getting started guide](https
 
 Please join us on the [Amatino discussion forums](https://amatino.io/discussion) and give us your feedback. We would love to hear from you. Amatino is in its earliest stages of development, and your feedback will influence the direction it moves in.
 
-Pull requests, comments, issues, forking, and so on are also most welcome here on Github!
+Pull requests, comments, issues, forking, and so on are also [most welcome on Github](https://github.com/amatino-code/amatino-js)!
 
 ## Useful links
 
