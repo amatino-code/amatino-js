@@ -53,7 +53,7 @@ let _ = amatinoAlpha.request(
   null,
   [{
     'name': 'My First Entity',
-    'description: null,
+    'description': null,
     'region_id': null
   }],
   (error, responseData) => {
