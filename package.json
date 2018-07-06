@@ -1,6 +1,6 @@
 {
   "name": "amatino",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Javascript Node.js bindings library for the Amatino API - Double entry accounting as a service",
   "main": "index.js",
   "scripts": {
@@ -11,9 +11,15 @@
     "url": "git+https://github.com/Amatino-Code/amatino-js.git"
   },
   "keywords": [
-    "accounting","api","amatino","double entry", "amatino api",
-    "double entry accounting","accounting library",
-    "amatino javascript","amatino npm"
+    "accounting",
+    "api",
+    "amatino",
+    "double entry",
+    "amatino api",
+    "double entry accounting",
+    "accounting library",
+    "amatino javascript",
+    "amatino npm"
   ],
   "author": "hugh@amatino.io",
   "license": "",
