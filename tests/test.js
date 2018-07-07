@@ -21,7 +21,6 @@ class Test {
     
     this._secret = this._loadSecret();
     this._email = this._loadEmail();
-    this._userId = this._loadUserId();
     this._timeout = DEFAULT_TIMEOUT;
 
     return;
@@ -37,14 +36,6 @@ class Test {
       throw 'Missing AMATINO_TEST_SECRET environment variable'
     }
     return key;
-  }
-  
-  _loadUserId() {
-    const userId = process.env.AMATINO_TEST_USER_ID;
-    if (userId === undefined) {
-      throw 'Missing AMATINO_TEST_USER_ID environment variable'
-    }
-    return userId;
   }
   
   _loadEmail() {
