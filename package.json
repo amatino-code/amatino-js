@@ -4,7 +4,7 @@
   "description": "Javascript Node.js bindings library for the Amatino API - Double entry accounting as a service",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No Amatino tests yet available\" && exit 1"
+    "test": "node tests/run.js"
   },
   "repository": {
     "type": "git",

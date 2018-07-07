@@ -10,45 +10,34 @@ const Session = require('./session.js');
 const ApiRequest = require('./_internal/api_request.js');
 
 /*
- * 
- * 
+ * Thin wrapper around HTTP requests to the Amatino API. Abstracts
+ * away HMAC calculation. Initialise with Amatino account credentials
+ * and then utilise the .request() method per Amatino's HTTP 
+ * documentation.
  */
 class AmatinoAlpha {
 
-	constructor(email, secret, callback) {
+	constructor(session) {
     
-    this._sessionCallback = callback;
-    this._session = null;
-    this._requestCallbacks = {};
-    const self = this;
-    _ = Session(
-      email,
-      secret,
-      this._loadSession.bind(self)
-    );
+    this._session = session;
+  
     return;
   
 	}
   
-  _loadSession(error, session) {
-    
-    this._session = session;
-    if (error === null) {
-      this._sessionCallback(null, this);
-    } else {
-      this._sessionCallback(error, null);
-    }
-    
-    return;
+  static createWithEmail(email, secret, callback) {
+    if (!email || !secret) {throw 'Missing email or secret'}
+    let _ = Session.createWithEmail(
+      email,
+      secret,
+      (error, session) => {
+        if (error != null) {callback(error, null); return;}
+        const alpha = new AmatinoAlpha(session);
+        callback(null, alpha);
+        return;
+      })
   }
   
-  _loadResponse(requestTime, error, responseData) {
-    
-    const callback = this._requestCallbacks[requestTime];
-    const _ = callback(error, responseData);
-  
-    return;
-  }
 	
 	request(
     path,
@@ -68,10 +57,14 @@ class AmatinoAlpha {
       method,
       queryString,
       body,
-      this._loadResponse.bind(self, requestTime)
+      (error, responseData) => {
+        callback(error, responseData);
+      }
     );
 
     return;
 	}
 
 }
+
+module.exports = AmatinoAlpha;

@@ -6,65 +6,51 @@
  */
  
 const CRYPTO = require('crypto');
-const SESSION_PATH = '/sessions';
+const SESSION_PATH = '/session';
 const SIGNATURE_HASH = 'sha512';
 
 const ApiRequest = require('./_internal/api_request.js');
 
 class Session {
 
-  constructor(email, secret, userId, callback) {
+  constructor(apiKey, sessionId, userId) {
     
-    if (email === null && userId === null) {
-      throw 'Supply either email or userId';
-    }
-    
-    if (email != null && userId != null) {
-      throw 'Supply either email or userId, but not both';
-    }
-    
-    if (secret === null) {
-      throw 'secret is required';
-    }
-    
-    this._apiKey = null;
-    this._userId = null;
-    this._sessionId = null;
-    this._callback = callback;
-    
-    const bodyData = {
-      'user_id': userId,
-      'secret': secret,
-      'email': email
-    }
-    
-    const self = this;
-  
-    const _ = ApiRequest(
-      null,
-      SESSION_PATH,
-      'POST',
-      bodyData,
-      null,
-      this._requestCallback.bind(self)
-    );
+    this._apiKey = apiKey;
+    this._userId = userId;
+    this._sessionId = sessionId;
 
 		return;
 	}
-
-  _requestCallback(error, responseData) {
-      
-      if (error != null) {
-        this._callback(error, null);
-      }
-      
-      this._apiKey = responseData['api_key'];
-      this._userId = responseData['user_id'];
-      this._sessionId = responseData['session_id'];
-      
-      this._callback(null, this);
-      
-      return;
+  
+  static createWithEmail(email, secret, callback) {
+    
+    const body = this._generateBody(email, secret, null);
+    
+    let _ = new ApiRequest(
+      null,
+      SESSION_PATH,
+      'POST',
+      body,
+      null,
+      (error, response) => {
+        if (error != null) {callback(error, null); return;}
+        const session = new Session(
+          response['api_key'],
+          response['session_id'],
+          response['user_id']
+        );
+        callback(null, Session);
+        return;
+      })
+  }
+  
+  static _generateBody(email, secret, userId) {
+    const body = {
+      "secret": secret,
+      "user_id": userId,
+      "account_email": email
+    }
+    return body;
   }
   
   signature(bodyData, path) {

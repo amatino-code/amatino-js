@@ -5,17 +5,16 @@
  * author: hugh@blinkybeach.com
  */
  
- const HTTPS = require('https');
  const NO_SESSION_PATHS = ['sessions'];
  const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
- const HTTPS = require('https');
- const API_HOSTNAME = 'api.amatino.io';
+ const HTTPS = require('http');
+ const API_HOSTNAME = "172.16.101.148"
  const USER_AGENT = 'Amatino Node.js Library';
  const HEADER_SIGNATURE_KEY = 'X-Signature';
  const HEADER_SESSION_KEY = 'X-Session-ID';
- const TIMEOUT_MILLISECONDS = 3000;
+ const TIMEOUT_MILLISECONDS = 1000;
  
- class _ApiRequest() {
+ class _ApiRequest {
   
   constructor(
     session,
@@ -34,22 +33,23 @@
       throw 'Requests to ' + path + ' require a Session.';
     }
     
-    if !(VALID_METHODS.indexOf(method) >= 0) {
-      throw 'Method ' + method + ' invalid or not supported';
-    }
-    
+    let fullPathCalc = null;
     if (urlParameters === null) {
-      const fullPath = path;
+      fullPathCalc = path;
     } else {
-      const fullPath = path + urlParameters;
+      fullPathCalc = path + urlParameters;
     }
+    if (urlParameters != null) {
+      fullPathCalc += urlParameters.queryString();
+    }
+    const fullPath = fullPathCalc;
 
     const headers = this._buildHeaders(session, bodyData, path);
     
     const requestOptions = {
       'hostname': API_HOSTNAME,
       'method': method,
-      'path': path + urlParameters,
+      'path': fullPath,
       'headers': headers,
       'timeout': TIMEOUT_MILLISECONDS
     }
@@ -61,14 +61,36 @@
         responseBody += chunk;
       });
       response.on('end', () => {
-        const responseJson = JSON.parse(responseBody);
+        if (response.statusCode != 200) {
+            const code = response.statusCode;
+            const errorDescription = 'Code: ' + code + ', data: ';
+            const error = Error(errorDescription + responseBody);
+            this._callback(error, null);
+            return;
+        }
+        let responseJson = null;
+        try {
+          responseJson = JSON.parse(responseBody);
+        } catch (error) {
+          const errorDescription = 'JSON parse failed. Body: ';
+          const amError = Error(errorDescription + responseBody);
+          this._callback(amError, null);
+          return;
+        }
         this._callback(null, responseJson);
       });
     });
     
+    request.on('timeout', () => {
+      request.abort();
+      this._callback(new Error("Api request timeout"), null);
+      return;
+    });
+    
     request.on('error', (error) => {
       this._callback(error, null);
-    }
+      return;
+    });
     
     request.write(JSON.stringify(bodyData));
     request.end();
@@ -79,19 +101,18 @@
   _buildHeaders(session, bodyData, path) {
       
     let headers = {'User-Agent': USER_AGENT};
-    if (session === null) {
-      return headers
-    }
     
-    headers[HEADER_SIGNATURE_KEY] = session.signature(bodyData, path);
-    headers[HEADER_SESSION_KEY] = session.id();
+    if (session) {
+      headers[HEADER_SIGNATURE_KEY] = session.signature(bodyData, path);
+      headers[HEADER_SESSION_KEY] = session.id();
+    }
     
     if (bodyData === null) {
       return headers;
     }
     
     headers['Content-Type'] = 'application/json';
-    const contentLength = Buffer.byteLength(JSON.stringify(postData));
+    const contentLength = Buffer.byteLength(JSON.stringify(bodyData));
     headers['Content-Length'] = contentLength;
     
     return headers;
@@ -99,3 +120,5 @@
   }
 
  }
+ 
+ module.exports = _ApiRequest
