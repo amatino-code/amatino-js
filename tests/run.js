@@ -8,11 +8,13 @@
 const TestAlphaInitialise = require('./alpha/initialise.js');
 const TestAlphaCreateEntity = require('./alpha/entity.js');
 const TestAlphaCreateAccount = require('./alpha/account.js');
+const TestAlphaCreateTransaction = require('./alpha/transaction.js');
 
 const testSequence = [
   new TestAlphaInitialise(),
   new TestAlphaCreateEntity(),
-  new TestAlphaCreateAccount()
+  new TestAlphaCreateAccount(),
+  new TestAlphaCreateTransaction()
 ]
 
 async function run(sequenceIndex) {

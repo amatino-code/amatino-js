@@ -8,14 +8,14 @@
 const Test = require('../test.js');
 const AmatinoAlpha = require('../../source/amatino_alpha.js');
 
-class TestAlphaCreateAccount extends Test {
+class TestAlphaCreateTransaction extends Test {
   
   constructor() {
-    super("Create an Account with AmatinoAlpha");
+    super("Create a Transaction with AmatinoAlpha");
     return
   }
   
-  _createAccount(alpha, resolve) {
+  _createTransactions(alpha, resolve) {
   
     let _ = alpha.request(
       '/entities',
@@ -34,10 +34,10 @@ class TestAlphaCreateAccount extends Test {
         }
         try {
           const newEntity = responseData[0];
-          this._createDummyAccount(alpha, resolve, newEntity);
+          this._createDummyAccounts(alpha, resolve, newEntity);
           return;
         } catch {
-          this.fail(error);
+          this.fail('Caught responseData index error: ' + error);
           resolve();
           return;
         }
@@ -46,11 +46,51 @@ class TestAlphaCreateAccount extends Test {
     )
   }
   
-  _createDummyEntity(alpha, resolve) {
+  _createDummyTransactions(alpha, resolve, entity, accounts) {
     
+    let _ = alpha.request(
+      '/transactions',
+      'POST',
+      '?entity_id=' + entity['entity_id'],
+      [{
+        'transaction_time': '2017-01-17_17:22:16.51245',
+        'description': 'receipt of some dosh',
+        'global_unit_denomination': 5,
+        'custom_unit_denomination': null,
+        'entries': [{
+          'account_id': Number(accounts['incomeAccount']['account_id']),
+          'description': '',
+          'side': 1,
+          'amount': '42.01'
+        }, {
+          'account_id': Number(accounts['cashAccount']['account_id']),
+          'description': '',
+          'side': 0,
+          'amount': '42.01'
+        }]
+      }], 
+      (error, responseData) => {
+        if (error) {
+          this.fail(error);
+          resolve();
+          return;
+        }
+        try {
+          const transaction = responseData[0];
+        } catch {
+          this.fail(error);
+          resolve();
+          return;
+        }
+        this.pass();
+        resolve();
+        return;
+      }
+    )
   }
   
-  _createDummyAccount(alpha, resolve, entity) {
+  _createDummyAccounts(alpha, resolve, entity) {
+
     let _ = alpha.request(
       '/accounts',
       'POST',
@@ -80,25 +120,29 @@ class TestAlphaCreateAccount extends Test {
           resolve();
           return;
         }
+        let accounts = {};
         try {
-          const subscriptionAccount = responseData[0];
+          const incomeAccount = responseData[0];
           const cashAccount = responseData[1];
+          accounts['incomeAccount'] = incomeAccount;
+          accounts['cashAccount'] = cashAccount;
         } catch {
           this.fail(error);
           resolve();
           return;
         }
-        this.pass();
-        resolve();
+
+        this._createDummyTransactions(alpha, resolve, entity, accounts);
         return;
       }
     )
   }
   
   execute() {
+
     const self = this;
-    return this.stage(this._createAccount.bind(self));
+    return this.stage(this._createTransactions.bind(self));
   }
 
 }
-module.exports = TestAlphaCreateAccount
+module.exports = TestAlphaCreateTransaction

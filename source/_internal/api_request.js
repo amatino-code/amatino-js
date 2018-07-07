@@ -5,18 +5,20 @@
  * author: hugh@blinkybeach.com
  */
  
- const NO_SESSION_PATHS = ['sessions'];
- const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
- const HTTPS = require('http');
- const API_HOSTNAME = "api.amatino.io"
- const USER_AGENT = 'Amatino Node.js Library';
- const HEADER_SIGNATURE_KEY = 'X-Signature';
- const HEADER_SESSION_KEY = 'X-Session-ID';
- const TIMEOUT_MILLISECONDS = 1000;
- const QUOTE_EXPRESSION = new RegExp(/(?<!")(\b\d+\b)(?!")/g);
- 
- class _ApiRequest {
-  
+const NO_SESSION_PATHS = ['sessions'];
+const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
+const HTTPS = require('http');
+const API_HOSTNAME = 'api.amatino.io'
+const USER_AGENT = 'Amatino Node.js Library';
+const HEADER_SIGNATURE_KEY = 'X-Signature';
+const HEADER_SESSION_KEY = 'X-Session-ID';
+const TIMEOUT_MILLISECONDS = 1000;
+const QUOTE_EXPRESSION = new RegExp(
+  /(?<!")(?<!-)(?<!:)(?<!\.)(\b\d+\b)(?!")(?!:)(?!-)/g
+); // https://regex101.com/r/qVQYA7/2
+
+class _ApiRequest {
+
   constructor(
     session,
     path,
@@ -106,7 +108,7 @@
     
     return;
   }
-  
+
   _buildHeaders(session, bodyData, path) {
       
     let headers = {'User-Agent': USER_AGENT};
@@ -128,6 +130,6 @@
     
   }
 
- }
- 
- module.exports = _ApiRequest
+}
+
+module.exports = _ApiRequest
