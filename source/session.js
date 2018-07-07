@@ -22,6 +22,10 @@ class Session {
 		return;
 	}
   
+  id() {
+    return this._sessionId;
+  }
+  
   static createWithEmail(email, secret, callback) {
     
     const body = this._generateBody(email, secret, null);
@@ -39,7 +43,7 @@ class Session {
           response['session_id'],
           response['user_id']
         );
-        callback(null, Session);
+        callback(null, session);
         return;
       })
   }
@@ -55,13 +59,48 @@ class Session {
   
   signature(bodyData, path) {
     
-    const hmac = CRYPTO.createHmac(SIGNATURE_HASH, this._apiKey);
-    bodyJson = JSON.stringify(bodyData);
-    hmac.update(bodyJson);
+    const requestTime = Math.floor(new Date() / 1000);
+    let message = null;
+    if (!bodyData) {
+      message = requestTime + path;
+    } else {
+      message = requestTime + path + JSON.stringify(bodyData);
+    }
 
-    return hmac.digest('base64');
+    const hmac = CRYPTO.createHmac(SIGNATURE_HASH, this._apiKey);
+    hmac.update(message, 'utf8');
+  
+    const signature = hmac.digest('base64');
+    return signature;
   }
 	
 }
 
 module.exports = Session;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

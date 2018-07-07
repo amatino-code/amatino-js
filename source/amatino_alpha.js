@@ -46,17 +46,19 @@ class AmatinoAlpha {
 		body,
     callback
 	) {
-		
-    const requestTime = new Date().getTime();
-    const self = this;
-    this._requestCallbacks[requestTime] = callback;
     
+    let urlParameters = null;
+    if (queryString) {
+      urlParameters = UrlParameters.initFromRawString(queryString);
+    }
+  
+
     const _ = new ApiRequest(
       this._session,
       path,
       method,
-      queryString,
       body,
+      urlParameters,
       (error, responseData) => {
         callback(error, responseData);
       }

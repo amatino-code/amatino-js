@@ -16,6 +16,7 @@ class TestAlphaInitialise extends Test {
   }
   
   execute() {
+
     return new Promise(resolve => {
       let _ = AmatinoAlpha.createWithEmail(
         this.email(),

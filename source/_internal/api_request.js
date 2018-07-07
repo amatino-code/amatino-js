@@ -8,11 +8,12 @@
  const NO_SESSION_PATHS = ['sessions'];
  const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
  const HTTPS = require('http');
- const API_HOSTNAME = "172.16.101.148"
+ const API_HOSTNAME = "api.amatino.io"
  const USER_AGENT = 'Amatino Node.js Library';
  const HEADER_SIGNATURE_KEY = 'X-Signature';
  const HEADER_SESSION_KEY = 'X-Session-ID';
  const TIMEOUT_MILLISECONDS = 1000;
+ const QUOTE_EXPRESSION = new RegExp(/(?<!")(\b\d+\b)(?!")/g);
  
  class _ApiRequest {
   
@@ -24,6 +25,7 @@
     urlParameters,
     callback
   ) {
+
     this._callback = callback;
     
     if (
@@ -37,15 +39,11 @@
     if (urlParameters === null) {
       fullPathCalc = path;
     } else {
-      fullPathCalc = path + urlParameters;
-    }
-    if (urlParameters != null) {
-      fullPathCalc += urlParameters.queryString();
+      console.log(urlParameters);
+      fullPathCalc = path + urlParameters.queryString();
     }
     const fullPath = fullPathCalc;
-
     const headers = this._buildHeaders(session, bodyData, path);
-    
     const requestOptions = {
       'hostname': API_HOSTNAME,
       'method': method,
@@ -70,7 +68,8 @@
         }
         let responseJson = null;
         try {
-          responseJson = JSON.parse(responseBody);
+          const quotedBody = responseBody.replace(QUOTE_EXPRESSION, '\"$&\"');
+          responseJson = JSON.parse(quotedBody);
         } catch (error) {
           const errorDescription = 'JSON parse failed. Body: ';
           const amError = Error(errorDescription + responseBody);
@@ -111,9 +110,9 @@
       return headers;
     }
     
-    headers['Content-Type'] = 'application/json';
     const contentLength = Buffer.byteLength(JSON.stringify(bodyData));
     headers['Content-Length'] = contentLength;
+    headers['Content-Type'] = 'application/json';
     
     return headers;
     

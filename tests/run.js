@@ -1,14 +1,16 @@
 const TestAlphaInitialise = require('./alpha/initialise.js');
+const TestAlphaCreateEntity = require('./alpha/entity.js');
 
 
 const testAlphaInitialise = new TestAlphaInitialise();
+const testAlphaCreateEntity = new TestAlphaCreateEntity();
 const testSequence = [
   new TestAlphaInitialise(),
-  new TestAlphaInitialise()
+  new TestAlphaCreateEntity()
 ]
 
 async function run(sequenceIndex) {
-  if (sequenceIndex >= (testSequence.length - 1)) {
+  if (sequenceIndex > (testSequence.length - 1)) {
     return;
   }
   const test = testSequence[sequenceIndex];
