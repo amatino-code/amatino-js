@@ -22,9 +22,9 @@
     "amatino npm"
   ],
   "author": "hugh@amatino.io",
-  "license": "",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Amatino-Code/amatino-js/issues"
   },
-  "homepage": "https://github.com/Amatino-Code/amatino-js"
+  "homepage": "https://amatino.io"
 }
