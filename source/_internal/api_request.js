@@ -8,7 +8,7 @@
  const NO_SESSION_PATHS = ['sessions'];
  const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
  const HTTPS = require('http');
- const API_HOSTNAME = "api.amatino.io"
+ const API_HOSTNAME = "172.16.101.148"
  const USER_AGENT = 'Amatino Node.js Library';
  const HEADER_SIGNATURE_KEY = 'X-Signature';
  const HEADER_SESSION_KEY = 'X-Session-ID';
@@ -68,7 +68,19 @@
         }
         let responseJson = null;
         try {
-          const quotedBody = responseBody.replace(QUOTE_EXPRESSION, '\"$&\"');
+          /* 
+           * While all moneytary amounts are transmitted as strings, the
+           * Amatino API makes liberal use of 64-bit integers as
+           * identifiers. For example, User ID's and Session ID's. 
+           * Because JavaScript has no native 64-bit integer support,
+           * these ID's get truncated on JSON parse. No arithmetic is
+           * performed on these identifers so we will convert them to
+           * strings before parsing.
+           * */
+          const quotedBody = responseBody.replace(
+            QUOTE_EXPRESSION,
+            '\"$&\"'
+          );
           responseJson = JSON.parse(quotedBody);
         } catch (error) {
           const errorDescription = 'JSON parse failed. Body: ';
