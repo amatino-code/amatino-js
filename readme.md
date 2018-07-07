@@ -33,9 +33,9 @@ The ````AmatinoAlpha```` object allows you to use the Amatino API without dealin
 Initialise an  `AmatinoAlpha` instance like so:
 
 ````javascript
-require('amatino');
+const Amatino = require('amatino');
 
-let _ = new AmatinoAlpha(
+let _ = Amatino.AmatinoAlpha.createWithEmail(
   'clever@cookie.com',
   'high entropy passphrase',
   (error, amatinoAlpha) => {
