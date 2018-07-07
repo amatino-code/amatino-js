@@ -1,6 +1,6 @@
 /*
  * Amatino JS
- * account.js - Alpha Account Test
+ * transaction.js - Alpha Transaction Test
  * 
  * author: hugh@blinkybeach.com
  */

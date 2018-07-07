@@ -6,6 +6,6 @@
  */
  
 module.exports = {
-  AmatinoAlpha: require('source/amatino_alpha.js'),
-  Session: require('source/session.js')
+  AmatinoAlpha: require('./source/amatino_alpha.js'),
+  Session: require('./source/session.js')
 }
