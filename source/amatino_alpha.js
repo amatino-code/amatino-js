@@ -49,9 +49,8 @@ class AmatinoAlpha {
     
     let urlParameters = null;
     if (queryString) {
-      urlParameters = UrlParameters.initFromRawString(queryString);
+      urlParameters = queryString;
     }
-  
 
     const _ = new ApiRequest(
       this._session,

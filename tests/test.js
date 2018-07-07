@@ -7,6 +7,8 @@
 
 const DEFAULT_TIMEOUT = 1000 * 4;
 
+const AmatinoAlpha = require('../source/amatino_alpha.js');
+
 class Test {
   /*
    * Base class for Amatino JS testing
@@ -92,6 +94,23 @@ class Test {
     return report;
   }
   
+  stage(executionFunction) {
+    return new Promise(resolve => {
+      let _ = AmatinoAlpha.createWithEmail(
+        this.email(),
+        this.secret(),
+        (error, alpha) => {
+          if (error != null) {
+            this.fail('Error: ' + error);
+            resolve();
+            return;
+          }
+          executionFunction(alpha, resolve);
+          return;
+        }
+      );
+    });
+  }
 }
 
 module.exports = Test;

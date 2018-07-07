@@ -8,7 +8,7 @@
  const NO_SESSION_PATHS = ['sessions'];
  const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
  const HTTPS = require('http');
- const API_HOSTNAME = "172.16.101.148"
+ const API_HOSTNAME = "api.amatino.io"
  const USER_AGENT = 'Amatino Node.js Library';
  const HEADER_SIGNATURE_KEY = 'X-Signature';
  const HEADER_SESSION_KEY = 'X-Session-ID';
@@ -39,8 +39,7 @@
     if (urlParameters === null) {
       fullPathCalc = path;
     } else {
-      console.log(urlParameters);
-      fullPathCalc = path + urlParameters.queryString();
+      fullPathCalc = path + urlParameters;
     }
     const fullPath = fullPathCalc;
     const headers = this._buildHeaders(session, bodyData, path);
@@ -102,7 +101,6 @@
       this._callback(error, null);
       return;
     });
-    
     request.write(JSON.stringify(bodyData));
     request.end();
     

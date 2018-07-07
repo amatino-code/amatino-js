@@ -1,12 +1,18 @@
+/*
+ * Amatino JS
+ * run.js - Test run marshall
+ * 
+ * author: hugh@blinkybeach.com
+ **/
+
 const TestAlphaInitialise = require('./alpha/initialise.js');
 const TestAlphaCreateEntity = require('./alpha/entity.js');
+const TestAlphaCreateAccount = require('./alpha/account.js');
 
-
-const testAlphaInitialise = new TestAlphaInitialise();
-const testAlphaCreateEntity = new TestAlphaCreateEntity();
 const testSequence = [
   new TestAlphaInitialise(),
-  new TestAlphaCreateEntity()
+  new TestAlphaCreateEntity(),
+  new TestAlphaCreateAccount()
 ]
 
 async function run(sequenceIndex) {
