@@ -5,10 +5,9 @@
  * author: hugh@blinkybeach.com
  */
  
-const NO_SESSION_PATHS = ['sessions'];
 const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
 const HTTPS = require('http');
-const API_HOSTNAME = 'api.amatino.io'
+const API_HOSTNAME = "api.amatino.io"
 const USER_AGENT = 'Amatino Node.js Library';
 const HEADER_SIGNATURE_KEY = 'X-Signature';
 const HEADER_SESSION_KEY = 'X-Session-ID';
@@ -29,13 +28,6 @@ class _ApiRequest {
   ) {
 
     this._callback = callback;
-    
-    if (
-      session === null
-      && NO_SESSION_PATHS.indexOf(path) >= 0
-    ) {
-      throw 'Requests to ' + path + ' require a Session.';
-    }
     
     let fullPathCalc = null;
     if (urlParameters === null) {
