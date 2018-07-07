@@ -18,9 +18,9 @@ In the mean time, you may wish to review [Amatino's HTTP documentation](https://
 
 ## Installation
 
-Amatino JS may be installed via [NPM](https://www.npmjs.com).
+Amatino JS may be installed via [NPM](https://www.npmjs.com/package/amatino).
 
-````
+````bash
 $ npm install amatino
 ````
 
@@ -68,6 +68,21 @@ Wherein the parameters passed to `request()` are the HTTP path, method, url para
 For example, the above request created an [Entity](https://amatino.io/documentation/entities). The requirements for Entity creation are available at https://amatino.io/documentation/entities#action-Create.
 
 For more examples of `AmatinoAlpha` usage, see the [getting started guide](https://amatino.io/articles/getting-started).
+
+## Running tests
+
+Amatino JS features a unit test suite. You can execute the test suite like so:
+
+````bash
+$ npm test
+````
+
+The test suite requires the presence of two environment variables: `AMATINO_TEST_EMAIL` and `AMATINO_TEST_SECRET`. These variables must be populated with the email address and passphrase of an Amatino user account with a valid subscription. For example:
+
+````bash
+$ export AMATINO_TEST_EMAIL=clever@cookie.com
+$ export AMATINO_TEST_SECRET="some high entropy passphrase"
+````
 
 ## Tell us what your think/want/like/hate
 
