@@ -84,6 +84,15 @@ $ export AMATINO_TEST_EMAIL=clever@cookie.com
 $ export AMATINO_TEST_SECRET="some high entropy passphrase"
 ````
 
+
+## JavaScript API stability & versioning
+
+Amatino JS obeys the [Semantic Version](https://semver.org) convention. Until v1.0.0, the JavaSript API should be considered unstable and liable to change at any time.
+
+>**Watch out! API currently unstable!**
+
+You can see available versions [in GitHub's releases section](https://github.com/amatino-code/amatino-js/releases) or [under NPM's 'Versions' heading](https://www.npmjs.com/package/amatino).
+
 ## Tell us what your think/want/like/hate
 
 Please join us on the [Amatino discussion forums](https://amatino.io/discussion) and give us your feedback. We would love to hear from you. Amatino is in its earliest stages of development, and your feedback will influence the direction it moves in.
@@ -99,4 +108,9 @@ Pull requests, comments, issues, forking, and so on are also [most welcome on Gi
  - [More Amatino client libraries](https://github.com/amatino-code)
  - [Documentation](https://amatino.io/documentation)
  - [Billing and account management](https://amatino.io/billing)
- - [About Amatino Pty Ltd](https://amatino.io/about)
+ - [About Amatino Pty Ltd](https://amatino.io/about
+ 
+## Get in contact
+
+To quickly speak to a human about Amatino, [email hugh@amatino.io](mailto:hugh@amatino.io) or [yell at him on Twitter (@hugh_jeremy)](https://twitter.com/hugh_jeremy).
+
