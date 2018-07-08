@@ -6,7 +6,7 @@
  */
  
 const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
-const HTTPS = require('http');
+const HTTPS = require('https');
 const API_HOSTNAME = "api.amatino.io"
 const USER_AGENT = 'Amatino Node.js Library';
 const HEADER_SIGNATURE_KEY = 'X-Signature';
