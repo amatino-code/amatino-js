@@ -108,7 +108,7 @@ Pull requests, comments, issues, forking, and so on are also [most welcome on Gi
  - [More Amatino client libraries](https://github.com/amatino-code)
  - [Documentation](https://amatino.io/documentation)
  - [Billing and account management](https://amatino.io/billing)
- - [About Amatino Pty Ltd](https://amatino.io/about
+ - [About Amatino Pty Ltd](https://amatino.io/about)
  
 ## Get in contact
 
