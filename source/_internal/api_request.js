@@ -62,7 +62,7 @@ class _ApiRequest {
         let responseJson = null;
         try {
           /* 
-           * While all moneytary amounts are transmitted as strings, the
+           * While all monetary amounts are transmitted as strings, the
            * Amatino API makes liberal use of 64-bit integers as
            * identifiers. For example, User ID's and Session ID's. 
            * Because JavaScript has no native 64-bit integer support,
