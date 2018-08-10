@@ -8,7 +8,7 @@
 const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
 const HTTPS = require('https');
 const API_HOSTNAME = "api.amatino.io"
-const USER_AGENT = 'Amatino Node.js Library';
+const USER_AGENT = 'Amatino Node.js Library 0.0.12';
 const HEADER_SIGNATURE_KEY = 'X-Signature';
 const HEADER_SESSION_KEY = 'X-Session-ID';
 const TIMEOUT_MILLISECONDS = 1000;
