@@ -73,3 +73,6 @@ class AmatinoTime {
   }
     
 }
+
+
+module.exports = AmatinoTime;
