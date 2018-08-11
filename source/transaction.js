@@ -264,7 +264,7 @@ class Transaction {
         jsonData['transaction_time']
       );
       const versionTime = new AmatinoTime(jsonData['version_time');
-      const transaction = Transaction(
+      const transaction = new Transaction(
         session,
         entity,
         jsonData['transaction_time'],
