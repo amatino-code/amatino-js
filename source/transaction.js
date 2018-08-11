@@ -132,13 +132,23 @@ class Transaction {
     entity,
     transactionTime,
     description,
-    globalUnitId,
+    globalUnitId = null,
+    customUnitId = null,
     entries,
     callback
   ) {
     
+    const unitsValid = Transaction.validateUnits(
+      globalUnitId,
+      customUnitId
+    );
+    if ( unitsValid != "valid") {
+      callback(unitsValid, null);
+      return;
+    }
+    
     const txTime = AmatinoTime.encode(transactionTime);
-    arguments = {
+    const arguments = {
       'transaction_time': txTime.encodedDate,
       'description': description,
       'global_unit_denomination': globalUnitId,
@@ -151,7 +161,7 @@ class Transaction {
       'POST',
       '?entity_id=' + this.entity.id,
       (error, jsonData) => {
-        if (error != null) { calback(error, null); return }
+        if (error != null) { callback(error, null); return }
         Transaction._decode(
           jsonData[0],
           callback,
@@ -164,8 +174,49 @@ class Transaction {
     
 		return;
 	}
-	update() {
-    throw Error('Not Implemented');
+  
+	update(
+    transactionTime,
+    description,
+    globalUnitId = null,
+    customUnitId = null,
+    entries,
+    callback
+  ) {
+    
+    const unitsValid = Transaction.validateUnits(
+      globalUnitId,
+      customUnitId
+    );
+    if ( unitsValid != "valid") {
+      callback(unitsValid, null);
+      return;
+    }
+    const txTime = AmatinoTime.encode(transactionTime);
+    const arguments = {
+      'transaction_id': this.id;
+      'transaction_time': txTime.encodedDate,
+      'description': description,
+      'global_unit_denomination': globalUnitId,
+      'custom_unit_denomination': customUnitId,
+      'entries': Entry.encodeMany(entries)
+    }
+    const _ = _ApiRequest(
+      this.session,
+      TRANSACTION_PATH,
+      'PUT',
+      '?entity_id=' + this.entity.id,
+      (error, jsonData) => {
+        if (error != null) { callback(error, null); return }
+        Transaction._decode(
+          jsonData[0],
+          callback,
+          this.session,
+          this.entity
+        );
+        return;
+      }
+    )
 		return;
 	}
 	
@@ -178,6 +229,16 @@ class Transaction {
     throw Error('Not Implemented');
 		return;
 	}
+  
+  static _validateUnits(globalUnitId, customUnitId) {
+    if (globalUnitId == null  && customUnitId == null) {
+      return Error("Supply either Global or Custom unit ID");
+    }
+    if (globalUnitId != null && customUnitId != null) {
+      return Error("Supply either Global or Custom unit ID, not both");
+    }
+    return "valid";
+  }
   
   static _decode(jsonData, callback, session, entity) {
     try {
