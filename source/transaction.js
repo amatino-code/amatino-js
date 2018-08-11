@@ -220,8 +220,26 @@ class Transaction {
 		return;
 	}
 	
-	delete() {
-    throw Error('Not Implemented');
+  /* Thought: `delete` is a reserved word, but it seems to be fine to
+   * use it as a method name. */
+	delete(callback) {
+    let urlParameter =  '?entity_id=' + this.entity.id;
+    urlParameters += '&transaction_id' + transactionId;
+    const _ = _ApiRequest(
+      this.session,
+      TRANSACTION_PATH,
+      'DELETE',
+      urlParameters,
+      (error, jsonData) => {
+        if (error != null) { callback(error, null); return }
+        Transaction._decode(
+          jsonData[0],
+          callback,
+          this.session,
+          this.entity
+        );
+      }
+    )
 		return;
 	}
 	
