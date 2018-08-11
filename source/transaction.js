@@ -9,6 +9,7 @@
 
 const AmatinoTime = require('./_internal/am_time.js');
 const Entry = require('./entry.js');
+const _ApiRequest = require('./_internal/api_request.js');
 
 const TX_REQUIRED_ARGS_MISSING = 'The session, entity, and completion' + 
 	' parameters are required'
@@ -58,7 +59,7 @@ class Transaction {
 		entries
 	){
 
-    this._id = transactionId;
+    this.id = transactionId;
     this._session = session;
     this._entity = entity;
     this._transactionTime = transactionTime;
@@ -74,29 +75,29 @@ class Transaction {
 	}
   
   get id() { return this._id }
-  set id() { throw new Error(TX_IMMUTABLE) }
+  set id(x) { throw new Error(TX_IMMUTABLE) }
   get session() { return this._session }
-  set session() { throw new Error(TX_IMMUTABLE) }
+  set session(x) { throw new Error(TX_IMMUTABLE) }
   get entity() { return this._entity }
-  set entity() { throw new Error(TX_IMMUTABLE) }
-  get transactionTime { return this._transactionTime }
-  set transactionTime { throw new Error(TX_IMMUTABLE) }
-  get versionTime { return this._versionTime }
-  set versionTime { throw new Error(TX_IMMUTABLE) }
-  get version { return this._version }
-  set version { throw new Error(TX_IMMUTABLE) }
-  get authorId { return this._authorId }
-  set authorId { throw new Error(TX_IMMUTABLE) }
-  get active { return this._active }
-  set active { throw new Error(TX_IMMUTABLE) }
-  get description { return this._description }
-  set description { throw new Error(TX_IMMUTABLE) }
-  get globalUnitId { return this._globalUnitId }
-  set globalUnitId { throw new Error(TX_IMMUTABLE) }
-  get customUnitId { return this._customUnitId }
-  set customUnitId { throw new Error(TX_IMMUTABLE) }
-  get entries { return this._entries }
-  set entries { throw new Error(TX_IMMUTABLE) }
+  set entity(x) { throw new Error(TX_IMMUTABLE) }
+  get transactionTime() { return this._transactionTime }
+  set transactionTime(x) { throw new Error(TX_IMMUTABLE) }
+  get versionTime() { return this._versionTime }
+  set versionTime(x) { throw new Error(TX_IMMUTABLE) }
+  get version() { return this._version }
+  set version(x) { throw new Error(TX_IMMUTABLE) }
+  get authorId() { return this._authorId }
+  set authorId(x) { throw new Error(TX_IMMUTABLE) }
+  get active() { return this._active }
+  set active(x) { throw new Error(TX_IMMUTABLE) }
+  get description() { return this._description }
+  set description(x) { throw new Error(TX_IMMUTABLE) }
+  get globalUnitId() { return this._globalUnitId }
+  set globalUnitId(x) { throw new Error(TX_IMMUTABLE) }
+  get customUnitId() { return this._customUnitId }
+  set customUnitId(x) { throw new Error(TX_IMMUTABLE) }
+  get entries() { return this._entries }
+  set entries(x) { throw new Error(TX_IMMUTABLE) }
   
   static retrieve(
     session,
@@ -112,7 +113,7 @@ class Transaction {
       '?entity_id=' + entity.id + '&transaction_id' + transactionId,
       (error, jsonData) => {
         if (error != null) { callback(error, null); return }
-        Transaction._loadResponse(
+        Transaction._decode(
           jsonData[0],
           callback,
           session,
@@ -126,8 +127,41 @@ class Transaction {
 	}
 
 	
-	static create() {
-    throw Error('Not implemented');
+	static create(
+    session,
+    entity,
+    transactionTime,
+    description,
+    globalUnitId,
+    entries,
+    callback
+  ) {
+    
+    const txTime = AmatinoTime.encode(transactionTime);
+    arguments = {
+      'transaction_time': txTime.encodedDate,
+      'description': description,
+      'global_unit_denomination': globalUnitId,
+      'custom_unit_denomination': customUnitId,
+      'entries': Entry.encodeMany(entries)
+    }
+    const _ = _ApiRequest(
+      this.session,
+      TRANSACTION_PATH,
+      'POST',
+      '?entity_id=' + this.entity.id,
+      (error, jsonData) => {
+        if (error != null) { calback(error, null); return }
+        Transaction._decode(
+          jsonData[0],
+          callback,
+          this.session,
+          this.entity
+        );
+        return;
+      }
+    )
+    
 		return;
 	}
 	update() {
@@ -145,7 +179,7 @@ class Transaction {
 		return;
 	}
   
-  static _loadResponse(jsonData, callback, session, entity) {
+  static _decode(jsonData, callback, session, entity) {
     try {
       const transactionTime = new AmatinoTime(
         jsonData['transaction_time']
@@ -172,5 +206,6 @@ class Transaction {
       return;
     }
   }
-	
 }
+
+module.exports = Transaction;
