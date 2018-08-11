@@ -1,6 +1,6 @@
 # Amatino JS
 
-Amatino is a double-entry accounting system. It provides double entry accounting as a service via an HTTP API. Amatino JS is a library for interacting with the Amatino API from within a Node.js application. By using Amatino JS, a Node.js developer can utilise Amatino services without needing to deal with raw HTTP requests.
+Amatino is an accounting engine. It stores, organises, and retrieves financial information via an HTTP API. Amatino JS is a library for interacting with the Amatino API from within a Node.js application. By using Amatino JS, a Node.js developer can utilise Amatino services without needing to deal with raw HTTP requests.
 
 ## About Amatino
 
