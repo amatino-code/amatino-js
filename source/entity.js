@@ -61,25 +61,62 @@ class Entity {
 
     static retrieve(
       session,
-      entity,
       entityId,
       callback
     ) {
-      const _ = _ApiRequest(
-        session,
-        ENTITY_PATH,
-        'GET',
-        null,
-        '?entity_id=' + entityId,
-        (error, jsonData) => {
-          if error != null { callback(error, null); return }
-          Entity._decode(
-            jsonData[0],
-            callback,
-            session
-          )
-        }
-      return;
+      try {
+        const _ = _ApiRequest(
+          session,
+          ENTITY_PATH,
+          'GET',
+          null,
+          '?entity_id=' + entityId,
+          (error, jsonData) => {
+            if error != null { callback(error, null); return }
+            Entity._decode(
+              jsonData[0],
+              callback,
+              session
+            )
+          }
+        )
+        return;
+      } catch(error) {
+        callback(error, null);
+        return;
+      }
+    }
+    
+    static create(
+      session,
+      name,
+      description,
+      storageRegionId,
+      callback
+    ) {
+      arguments = [{
+        'name': name,
+        'description': description,
+        'region_id': storageRegionId
+      }]
+      try {
+        const _ = _ApiRequest(
+          session,
+          ENTITY_PATH,
+          'POST',
+          arguments,
+          null,
+          (error, jsonData) => {
+            if error != null { callback(error, null); return }
+            Entity._decode(jsonData[0], callback, session)
+            return;
+          }
+        )
+        return;
+      } catch(error) {
+        callback(error, null);
+        return;
+      }
     }
     
     static _decode(jsonData, callback, session) {
