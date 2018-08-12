@@ -41,8 +41,7 @@ const TX_IMMUTABLE = 'Transaction instances are immutable. Use the' +
  */
 class Transaction {
   
-  static get PATH {
-  }
+  static get PATH { return '/transactions' }
   
 	constructor(
 		session,

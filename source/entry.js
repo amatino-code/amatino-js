@@ -47,6 +47,14 @@ class Entry {
     return entry;
   }
 
+  static decodeMany(json) {
+    let entries = new Array();
+    for (let rawEntry in json) {
+      entries.push(Entry.decode(rawEntry));
+    }
+    return entries;
+  }
+
 }
 
 module.exports = Entry;

@@ -49,6 +49,10 @@ class Test {
   secret() {return this._secret;}
   userId() {return this._userId;}
   email() {return this._email;}
+  get secret() {return this._secret;}
+  get userId() {return this._userId;}
+  get email() {return this._email;}
+  
   
   didFinish() {
     if (this._didPass == null) {
@@ -87,19 +91,26 @@ class Test {
   
   stage(executionFunction) {
     return new Promise(resolve => {
-      let _ = AmatinoAlpha.createWithEmail(
-        this.email(),
-        this.secret(),
-        (error, alpha) => {
-          if (error != null) {
-            this.fail('Error: ' + error);
-            resolve();
+      try {
+        let _ = AmatinoAlpha.createWithEmail(
+          this.email,
+          this.secret,
+          (error, alpha) => {
+            if (error != null) {
+              this.fail('Error: ' + error);
+              resolve();
+              return;
+            }
+            executionFunction(alpha, resolve);
             return;
           }
-          executionFunction(alpha, resolve);
-          return;
-        }
-      );
+        );
+      } catch(error) {
+        this.fail(error);
+        resolve();
+        return;  
+      }
+    
     });
   }
 }

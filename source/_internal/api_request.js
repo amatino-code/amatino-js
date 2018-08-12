@@ -95,6 +95,7 @@ class _ApiRequest {
       this._callback(error, null);
       return;
     });
+
     request.write(JSON.stringify(bodyData));
     request.end();
     
@@ -113,7 +114,7 @@ class _ApiRequest {
     if (bodyData === null) {
       return headers;
     }
-    
+
     const contentLength = Buffer.byteLength(JSON.stringify(bodyData));
     headers['Content-Length'] = contentLength;
     headers['Content-Type'] = 'application/json';

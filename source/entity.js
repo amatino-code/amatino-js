@@ -13,7 +13,7 @@ const _ApiRequest = require('./_internal/api_request.js');
 const ENTITY_IMMUTABLE = 'Entity instances are immutable. Use' +
   ' the .update() method on an Entity instance to make changes'
   
-const ENTITY_PATH = 'entities';
+const ENTITY_PATH = '/entities';
 
 /**
 * An Amatino entity is a economic body to be described by accounting
@@ -28,6 +28,7 @@ class Entity {
     constructor(
       session,
       id,
+      name,
       ownerId,
       permissionsGraph,
       description,
@@ -36,6 +37,7 @@ class Entity {
     ) {
       this._session = session;
       this._id = id;
+      this._name = name;
       this._ownerId = ownerId;
       this._permissionsGraph = permissionsGraph;
       this._description = description;
@@ -43,11 +45,15 @@ class Entity {
       this._active = active;
       return;
     }
+
+    static get PATH() { return '/entities' }
     
     get session() { return this._session }
     set session(x) { throw new Error(ENTITY_IMMUTABLE) }
     get id() { return this._id }
     set id(x) { throw new Error(ENTITY_IMMUTABLE) }
+    get name() { return this._name }
+    set name(x) { throw new Error(ENTITY_IMMUTABLE) }
     get ownerId() { return this._ownerId }
     set ownerId(x) { throw new Error(ENTITY_IMMUTABLE) }
     get permissionsGraph() { return this._permissionsGraph }
@@ -65,14 +71,14 @@ class Entity {
       callback
     ) {
       try {
-        const _ = _ApiRequest(
+        const _ = new _ApiRequest(
           session,
-          ENTITY_PATH,
+          Entity.PATH,
           'GET',
           null,
           '?entity_id=' + entityId,
           (error, jsonData) => {
-            if error != null { callback(error, null); return }
+            if (error != null) { callback(error, null); return }
             Entity._decode(
               jsonData[0],
               callback,
@@ -94,20 +100,20 @@ class Entity {
       storageRegionId,
       callback
     ) {
-      arguments = [{
+      const jsonData = [{
         'name': name,
         'description': description,
         'region_id': storageRegionId
       }]
       try {
-        const _ = _ApiRequest(
+        const _ = new _ApiRequest(
           session,
-          ENTITY_PATH,
+          Entity.PATH,
           'POST',
-          arguments,
+          jsonData,
           null,
           (error, jsonData) => {
-            if error != null { callback(error, null); return }
+            if (error != null) { callback(error, null); return }
             Entity._decode(jsonData[0], callback, session)
             return;
           }
@@ -119,11 +125,25 @@ class Entity {
       }
     }
     
+    static update(
+      name,
+      description,
+      permissionsGraph,
+      callback
+    ) {
+      throw Error('Not implemented');
+      /* Not implemented due to present inconsistency in HTTP API
+       * documentation at https://amatino.io/documentation/entities
+       * 12 Aug 2018
+       * */
+    }
+    
     static _decode(jsonData, callback, session) {
       try {
         const entity = new Entity(
           session,
           jsonData['entity_id'],
+          jsonData['name'],
           jsonData['owner'],
           jsonData['permissions_graph'],
           jsonData['description'],
@@ -139,3 +159,5 @@ class Entity {
       }
     }
 }
+
+module.exports = Entity;

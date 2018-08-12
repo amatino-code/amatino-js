@@ -18,14 +18,12 @@ class AmatinoTime {
       this._dateObject = this._decode(rawDateTimeString);
     }
     return;
-    
-    const 
   }
   
-  get encodedDate { return this._string }
-  set encodedDate { throw Error("Immutable") }
-  get decodedDate { return this._dateObject }
-  set decodedDate { throw Error("Immutable") }
+  get encodedDate() { return this._string }
+  set encodedDate(x) { throw Error("Immutable") }
+  get decodedDate() { return this._dateObject }
+  set decodedDate(x) { throw Error("Immutable") }
   
   _encode(date) {
     
