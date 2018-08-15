@@ -230,7 +230,7 @@ class Account {
         this.session,
         Account.PATH,
         'PUT',
-        null,
+        jsonData,
         '?entity_id=' + this.entity.id,
         (error, jsonData) => {
           if (error != null) { callback(error, null); return; }

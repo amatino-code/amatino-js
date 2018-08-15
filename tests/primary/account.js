@@ -129,7 +129,6 @@ class TestAccountOperations extends Test {
       const newName = 'Updated test';
       const newDescription = 'Updated test description for asset acc.';
       const promise = new Promise((resolve, reject) => {
-        console.log(self._createdAccount);
         try {
           self._createdAccount.update(
             newName,
