@@ -58,7 +58,7 @@ class Transaction {
 		entries
 	){
 
-    this.id = transactionId;
+    this._id = transactionId;
     this._session = session;
     this._entity = entity;
     this._transactionTime = transactionTime;
@@ -109,7 +109,7 @@ class Transaction {
       TRANSACTION_PATH,
       'GET',
       null,
-      '?entity_id=' + entity.id + '&transaction_id' + transactionId,
+      '?entity_id=' + entity.id + '&transaction_id=' + transactionId,
       (error, jsonData) => {
         if (error != null) { callback(error, null); return }
         Transaction._decode(

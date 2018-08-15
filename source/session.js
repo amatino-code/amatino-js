@@ -11,20 +11,25 @@ const SIGNATURE_HASH = 'sha512';
 
 const ApiRequest = require('./_internal/api_request.js');
 
+const SESSION_IMMUTABLE = 'Session instances are immutable';
+
 class Session {
 
   constructor(apiKey, sessionId, userId) {
     
-    this._apiKey = apiKey;
-    this._userId = userId;
-    this._sessionId = sessionId;
+    this.apiKey = apiKey;
+    this.userId = userId;
+    this.id = sessionId;
 
 		return;
 	}
   
-  id() {
-    return this._sessionId;
-  }
+  get id() { return this._id }
+  set id(x) { throw Error(SESSION_IMMUTABLE) }
+  get userId() { return this._userId }
+  set userId(x) { throw Error(SESSION_IMMUTABLE) }
+  get apiKey() { return this._apiKey }
+  set apiKey(x) { throw Error(SESSION_IMMUTABLE) }
   
   static createWithEmail(email, secret, callback) {
     
@@ -43,7 +48,8 @@ class Session {
           response['session_id'],
           response['user_id']
         );
-        callback(null, session);
+        const frozenSession = Object.freeze(session);
+        callback(null, frozenSession);
         return;
       })
   }
