@@ -108,7 +108,7 @@ class _ApiRequest {
     
     if (session) {
       headers[HEADER_SIGNATURE_KEY] = session.signature(bodyData, path);
-      headers[HEADER_SESSION_KEY] = session.id();
+      headers[HEADER_SESSION_KEY] = session.id;
     }
     
     if (bodyData === null) {

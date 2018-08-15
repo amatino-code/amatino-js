@@ -17,9 +17,9 @@ class Session {
 
   constructor(apiKey, sessionId, userId) {
     
-    this.apiKey = apiKey;
-    this.userId = userId;
-    this.id = sessionId;
+    this._apiKey = apiKey;
+    this._userId = userId;
+    this._id = sessionId;
 
 		return;
 	}
