@@ -74,6 +74,11 @@ class Test {
     this._hint = hint;
     return;
   }
+  
+  passIfNotFailed(hint=null) {
+    if (!this.didFinish()) { this.pass(hint); }
+    return;
+  }
 
   report() {
     if (this._didPass == null) {throw 'Test never passed or failed'};
@@ -85,6 +90,10 @@ class Test {
     }
     report += this._description;
     if (this._hint == null) {return report};
+    if (this._hint.stack) {
+      report += '\n' + this._hint.stack;
+      return report;
+    }
     report += '\n       ' + this._hint;
     return report;
   }

@@ -53,6 +53,7 @@ class _ApiRequest {
       });
       response.on('end', () => {
         if (response.statusCode != 200) {
+            console.log('Error:', response.statusCode, 'path: ', fullPath, 'body:', bodyData, 'responseBody:', responseBody);
             const code = response.statusCode;
             const errorDescription = 'Code: ' + code + ', data: ';
             const error = Error(errorDescription + responseBody);

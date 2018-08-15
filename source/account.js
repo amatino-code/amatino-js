@@ -15,7 +15,7 @@ const AC_IMMUTABLE = 'Account instances are immutable. Use the' +
 
 class Account {
   
-  static get PATH { return '/accounts' }
+  static get PATH() { return '/accounts' }
   
   constructor(
     session,
@@ -36,7 +36,7 @@ class Account {
     this._id = accountId;
     this._name = name;
     this._type = type;
-    this._parentAccountId;
+    this._parentAccountId = parentAccountId;
     this._globalUnitId = globalUnitId;
     this._customUnitId = customUnitId;
     this._counterPartyEntityId = counterPartyEntityId;
@@ -75,15 +75,15 @@ class Account {
     callback
   ) {
     try {
-      const _ = _ApiRequest(
+      const _ = new _ApiRequest(
         session,
-        Transaction.PATH,
+        Account.PATH,
         'GET',
         null,
         '?entity_id=' + entity.id + '&account_id=' + accountId,
         (error, jsonData) => {
           if (error != null) { callback(error, null); return }
-          Transaction._decode(
+          Account._decode(
             jsonData[0],
             callback,
             session,
@@ -111,20 +111,20 @@ class Account {
     colour,
     callback
   ) {
-   Account.create(
-    session,
-    entity,
-    name,
-    type,
-    parent,
-    globalUnitId,
-    null,
-    counterPartyEntity,
-    description,
-    colour,
-    callback
-   );
-   return; 
+    Account._create(
+      session,
+      entity,
+      name,
+      type,
+      parent,
+      globalUnitId,
+      null,
+      counterPartyEntity,
+      description,
+      colour,
+      callback
+    );
+    return;
   }
   
   static createWithCustomUnitDenomination(
@@ -139,7 +139,7 @@ class Account {
     colour,
     callback
   ) {
-   Account.create(
+   Account._create(
     session,
     entity,
     name,
@@ -169,24 +169,27 @@ class Account {
     callback
   ) {
     try {
-      
-      jsonData = [{
+      if (!entity) { throw Error("Entity parameter is required"); }
+      let parentId = null;
+      if (parent) { parentId = parent.id }
+      let counterParty = null;
+      if (counterPartyEntity) { counterParty = counterPartyEntity.id }
+      const jsonData = [{
         'name': name,
         'description': description,
         'type': type.value,
-        'parent_account_id': parent.id,
+        'parent_account_id': parentId,
         'global_unit_id': globalUnitId,
         'custom_unit_id': customUnitId,
-        'counterparty_entity_id': counterPartyEntity.id,
-        'color': colour
-        
+        'counterparty_entity_id': counterParty,
+        'colour': colour
       }]
-      const _ = _ApiRequest(
+      const _ = new _ApiRequest(
         session,
         Account.PATH,
         'POST',
         jsonData,
-        null,
+        '?entity_id=' + entity.id,
         (error, jsonData) => {
           if (error != null) { callback(error, null); return }
           Account._decode(jsonData[0], callback, session, entity);
@@ -211,18 +214,19 @@ class Account {
     callback
   ) {
     try {
-      jsonData = [{
+      const jsonData = [{
         'account_id': this.id,
         'name': name,
         'type': type.value,
-        'parent_account_id': parent.id,
+        'parent_account_id': parentAccountId,
         'global_unit_id': globalUnitId,
         'custom_unit_id': customUnitId,
         'counterparty_entity_id': counterPartyEntityId,
         'description': description,
-        'color': colour
+        'colour': colour
       }]
-      const _ = _ApiRequest(
+      console.log(jsonData);
+      const _ = new _ApiRequest(
         this.session,
         Account.PATH,
         'PUT',
@@ -281,18 +285,30 @@ class Account {
 
   static _decode(jsonData, callback, session, entity) {
     try {
+      let guid = null;
+      let cuid = null;
+      if (jsonData['global_unit_id']) {
+        guid = parseInt(jsonData['global_unit_id'])
+      }
+      if (jsonData['custom_unit_id']) {
+        cuid = parseInt(jsonData['custom_unit_id'])
+      }
+      let paid = null;
+      if (jsonData['counterparty_entity_id']) {
+        paid = parseInt(jsonData['counterparty_entity_id']);
+      }
       const account = new Account(
        session,
        entity,
-       jsonData['account_id'],
+       parseInt(jsonData['account_id']),
        jsonData['name'],
        AccountType.withValue(jsonData['type']),
        jsonData['parent_account_id'],
-       jsonData['global_account_id'],
-       jsonData['custom_account_id'],
-       jsonData['counterparty_entity_id'],
+       guid,
+       cuid,
+       paid,
        jsonData['description'],
-       jsonData['color']
+       jsonData['colour']
       )
       callback(null, account);
       return;
@@ -301,3 +317,5 @@ class Account {
     }
   }
 }
+
+module.exports = Account;

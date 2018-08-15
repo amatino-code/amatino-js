@@ -114,7 +114,7 @@ class Entity {
           null,
           (error, jsonData) => {
             if (error != null) { callback(error, null); return }
-            Entity._decode(jsonData[0], callback, session)
+            Entity._decode(jsonData[0], callback, session);
             return;
           }
         )
@@ -137,6 +137,9 @@ class Entity {
        * 12 Aug 2018
        * */
     }
+    
+    delete() { throw Error("Not implemented"); }
+      
     
     static _decode(jsonData, callback, session) {
       try {

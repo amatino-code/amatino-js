@@ -5,29 +5,30 @@
  * author: hugh@blinkybeach.com
  */
 
-class _AccountType {
-  constructor (return;) {}
+class AccountType {
+  constructor () {return;}
   
-  static get asset { return { value: 1, name: 'asset' } }
-  static get liability { return { value: 2, name: 'liability' } }
-  static get income {return { value: 4, name: 'income' } }
-  static get expense {return { value: 5, name: 'expense' } }
-  static get equity {return { value: 3, name: 'equity' } }
+  static get asset() { return { value: 1, name: 'asset' } }
+  static get liability() { return { value: 2, name: 'liability' } }
+  static get income() {return { value: 4, name: 'income' } }
+  static get expense() {return { value: 5, name: 'expense' } }
+  static get equity() {return { value: 3, name: 'equity' } }
   
-  static get _all {
+  static get _all() {
     return [
-      _AccountType.asset,
-      _AccountType.liability,
-      _AccountType.income,
-      _AccountType.expense,
-      _AccountType.equity
+      AccountType.asset,
+      AccountType.liability,
+      AccountType.income,
+      AccountType.expense,
+      AccountType.equity
     ];
   }
   
   static withValue(integerValue) {
-    for type in _AccountType._all {
-      if (type.value == integerValue) {
-        return type;
+    const types = AccountType._all;
+    for(let i = 0; i < types.length; i++){
+      if (types[i].value == integerValue) {
+        return types[i];
       }
     }
     throw Error("Type not found. Valid values: 1, 2, 3, 4, 5");
@@ -40,7 +41,7 @@ class _AccountType {
     } catch {
       throw Error("A string name must be supplied, e,g, 'equity'.");
     }
-    for type in _AccountType._all {
+    for (let type in AccountType._all) {
       if (type.name == lowerName) {
         return type;
       }
@@ -48,9 +49,5 @@ class _AccountType {
     throw Error("Type not found.");
   }
 }
-
-const AccountType = _AccountType();
-
-Object.freeze(AccountType);
 
 module.exports = AccountType;
