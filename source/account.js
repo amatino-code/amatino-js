@@ -99,7 +99,7 @@ class Account {
     return;
   }
   
-  static createWithGlobalUnitDenomination(
+  static createWithGlobalUnit(
     session,
     entity,
     name,
@@ -127,7 +127,7 @@ class Account {
     return;
   }
   
-  static createWithCustomUnitDenomination(
+  static createWithCustomUnit(
     session,
     entity,
     name,

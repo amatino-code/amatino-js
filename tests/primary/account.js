@@ -73,7 +73,7 @@ class TestAccountOperations extends Test {
       const newName = name;
       const promise = new Promise((resolve, reject) => {
         try {
-          Account.createWithGlobalUnitDenomination(
+          Account.createWithGlobalUnit(
             self.session,
             self.entity,
             newName,
