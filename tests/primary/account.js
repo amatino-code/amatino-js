@@ -91,7 +91,7 @@ class TestAccountOperations extends Test {
                 reject(Error("Colour missing")); return;
               }
               self._createdAccount = account;
-              resolve(); return;
+              resolve(account); return;
             }
           );
         } catch(error) {
@@ -147,7 +147,6 @@ class TestAccountOperations extends Test {
               if (account.description != newDescription) {
                 reject(Error('description not updated')); return;
               }
-              console.log(account);
               resolve(); return;
             }
           );
@@ -160,13 +159,13 @@ class TestAccountOperations extends Test {
     
     _deleteAccount() {
       const self = this;
-      const deleteId = this._createdAccount.id;
+      const oldAccount = self._createdAccount;
       const promise = new Promise((resolve, reject) => {
         try {
           self._createAccount()
-            .then(() => {
-                Account.delete(
-                  this._createdAccount.id,
+            .then((newAccount) => {
+                newAccount.delete(
+                  oldAccount,
                   false,
                   null,
                   (error, deletionList) => {
@@ -193,6 +192,7 @@ class TestAccountOperations extends Test {
           .then(() => self._createAccount())
           .then(() => self._retrieveAccount())
           .then(() => self._updateAccount())
+          .then(() => self._deleteAccount())
           .catch(error => {self.fail(error); return;})
           .then(() => self.passIfNotFailed())
           .then(resolve);

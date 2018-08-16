@@ -259,13 +259,13 @@ class Account {
       if (newChildParentAccount) {
         newChildParent = newChildParentAccount.id;
       }
-      jsonData = [{
+      const jsonData = [{
         "target_account_id": this.id,
         "entry_replacement_account_id": entryReplacementAccount.id,
-        "new_child_parent_account_id": newChildParent,
+        "new_parent_account_id": newChildParent,
         "delete_children": deleteChildren
       }]
-      const _ = _ApiRequest(
+      const _ = new _ApiRequest(
         this.session,
         Account.PATH,
         'DELETE',
