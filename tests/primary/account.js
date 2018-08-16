@@ -13,19 +13,23 @@ const AccountType = require('../../source/type.js');
 
 class TestAccountOperations extends Test {
 
-  constructor() {
-    super('Create, retrieve, update, and delete an Account');
-    this._session = null;
-    this._entity = null;
+  constructor(description=null) {
+    let name = 'Create, retrieve, update, and delete an Account';
+    if (description != null) {
+      name = description;
+    }
+    super(name);
+    this.session = null;
+    this.entity = null;
     this._createdAccount = null;
     return;
   }
   
-    _createEntity() {
+    createEntity() {
       const promise = new Promise((resolve, reject) => {
         try {
           Entity.create(
-            this._session,
+            this.session,
             'Test Entity',
             'Test description phrase',
             null,
@@ -33,7 +37,7 @@ class TestAccountOperations extends Test {
               if (error != null) {
                 reject(error); return;
               }
-              this._entity = entity;
+              this.entity = entity;
               resolve(); return;
             }
           );
@@ -44,7 +48,7 @@ class TestAccountOperations extends Test {
       return promise;
     }
     
-    _createSession() {
+    createSession() {
       const self = this;
       const promise = new Promise((resolve, reject) => {
         try {
@@ -53,7 +57,7 @@ class TestAccountOperations extends Test {
             self.secret,
             (error, session) => {
               if (error != null) { reject(error); return; }
-              self._session = session;
+              self.session = session;
               resolve(); return;
             }
           );
@@ -64,16 +68,16 @@ class TestAccountOperations extends Test {
       return promise;
     }
     
-    _createAccount() {
+    createAccount(name='Test Asset Account', acType=AccountType.asset) {
       const self = this;
-      const newName = 'Test Asset Account';
+      const newName = name;
       const promise = new Promise((resolve, reject) => {
         try {
           Account.createWithGlobalUnitDenomination(
-            self._session,
-            self._entity,
+            self.session,
+            self.entity,
             newName,
-            AccountType.asset,
+            acType,
             null,
             5,
             null,
@@ -106,8 +110,8 @@ class TestAccountOperations extends Test {
       const promise = new Promise((resolve, reject) => {
         try {
           Account.retrieve(
-            self._session,
-            self._entity,
+            self.session,
+            self.entity,
             self._createdAccount.id,
             (error, account) => {
               if (error != null) { reject(error); return; }
@@ -162,7 +166,7 @@ class TestAccountOperations extends Test {
       const oldAccount = self._createdAccount;
       const promise = new Promise((resolve, reject) => {
         try {
-          self._createAccount()
+          self.createAccount()
             .then((newAccount) => {
                 newAccount.delete(
                   oldAccount,
@@ -187,9 +191,9 @@ class TestAccountOperations extends Test {
       const self = this;
       const promise = new Promise(resolve => {
         try {
-          self._createSession()
-          .then(() => self._createEntity())
-          .then(() => self._createAccount())
+          self.createSession()
+          .then(() => self.createEntity())
+          .then(() => self.createAccount())
           .then(() => self._retrieveAccount())
           .then(() => self._updateAccount())
           .then(() => self._deleteAccount())

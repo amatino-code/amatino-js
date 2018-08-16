@@ -35,10 +35,10 @@ class AmatinoTime {
     let dateString = '' + date.getUTCFullYear() + '-';
     dateString += padZero(date.getUTCMonth()) + '-';
     dateString += padZero(date.getUTCDate()) + '_';
-    dateString += padZero(date.getUTCHour()) + ':';
+    dateString += padZero(date.getUTCHours()) + ':';
     dateString += padZero(date.getUTCMinutes()) + ':';
     dateString += padZero(date.getUTCSeconds()) + '.';
-    dateString += date.getUTCMilliseconds + '00';
+    dateString += date.getUTCMilliseconds() + '00';
     return dateString;
   }
   
@@ -51,9 +51,9 @@ class AmatinoTime {
     const day = dateSplit[2];
     const timePart = splitString[1];
     const timeSplit = timePart.split(':');
-    const hour = timeSplit[1];
-    const minute = timeSplit[2];
-    const secondSplit = timeSplit[3].split('.');
+    const hour = timeSplit[0];
+    const minute = timeSplit[1];
+    const secondSplit = timeSplit[2].split('.');
     const second = secondSplit[0];
     const millisecond = secondSplit[1].substring(0,3);
     const date = new Date(Date.UTC(
@@ -71,6 +71,5 @@ class AmatinoTime {
   }
     
 }
-
 
 module.exports = AmatinoTime;

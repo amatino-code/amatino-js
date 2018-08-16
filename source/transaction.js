@@ -41,7 +41,7 @@ const TX_IMMUTABLE = 'Transaction instances are immutable. Use the' +
  */
 class Transaction {
   
-  static get PATH { return '/transactions' }
+  static get PATH() { return '/transactions' }
   
 	constructor(
 		session,
@@ -104,9 +104,9 @@ class Transaction {
     transactionId,
     callback
   ) {
-    const _ = _ApiRequest(
+    const _ = new _ApiRequest(
       session,
-      TRANSACTION_PATH,
+      Transaction.PATH,
       'GET',
       null,
       '?entity_id=' + entity.id + '&transaction_id=' + transactionId,
@@ -137,7 +137,7 @@ class Transaction {
     callback
   ) {
     
-    const unitsValid = Transaction.validateUnits(
+    const unitsValid = Transaction._validateUnits(
       globalUnitId,
       customUnitId
     );
@@ -147,25 +147,26 @@ class Transaction {
     }
     
     const txTime = AmatinoTime.encode(transactionTime);
-    const arguments = {
+    const requestData = [{
       'transaction_time': txTime.encodedDate,
       'description': description,
       'global_unit_denomination': globalUnitId,
       'custom_unit_denomination': customUnitId,
       'entries': Entry.encodeMany(entries)
-    }
-    const _ = _ApiRequest(
-      this.session,
-      TRANSACTION_PATH,
+    }]
+    const _ = new _ApiRequest(
+      session,
+      Transaction.PATH,
       'POST',
-      '?entity_id=' + this.entity.id,
+      requestData,
+      '?entity_id=' + entity.id,
       (error, jsonData) => {
         if (error != null) { callback(error, null); return }
         Transaction._decode(
           jsonData[0],
           callback,
-          this.session,
-          this.entity
+          session,
+          entity
         );
         return;
       }
@@ -183,7 +184,7 @@ class Transaction {
     callback
   ) {
     
-    const unitsValid = Transaction.validateUnits(
+    const unitsValid = Transaction._validateUnits(
       globalUnitId,
       customUnitId
     );
@@ -192,18 +193,19 @@ class Transaction {
       return;
     }
     const txTime = AmatinoTime.encode(transactionTime);
-    const arguments = {
-      'transaction_id': this.id;
+    const requestData = [{
+      'transaction_id': this.id,
       'transaction_time': txTime.encodedDate,
       'description': description,
       'global_unit_denomination': globalUnitId,
       'custom_unit_denomination': customUnitId,
       'entries': Entry.encodeMany(entries)
-    }
-    const _ = _ApiRequest(
+    }]
+    const _ = new _ApiRequest(
       this.session,
-      TRANSACTION_PATH,
+      Transaction.PATH,
       'PUT',
+      requestData,
       '?entity_id=' + this.entity.id,
       (error, jsonData) => {
         if (error != null) { callback(error, null); return }
@@ -262,19 +264,25 @@ class Transaction {
       const transactionTime = new AmatinoTime(
         jsonData['transaction_time']
       );
-      const versionTime = new AmatinoTime(jsonData['version_time');
+      const versionTime = new AmatinoTime(jsonData['version_time']);
+      let guid = jsonData['global_unit_denomination'];
+      if (guid != null) { guid = parseInt(guid) };
+      let cuid = jsonData['custom_unit_denomination'];
+      if (cuid != null) { cuid = parseInt(cuid) };
       const transaction = new Transaction(
         session,
         entity,
-        jsonData['transaction_time'],
+        jsonData['transaction_id'],
         transactionTime.decodedDate,
         versionTime.decodedDate,
-        jsonData['version'],
-        jsonData['author_id'],
+        parseInt(jsonData['version']),
+        /* We don't parseInt the author ID as this is assuredly a
+         * 64 bit integer */
+        jsonData['author'],
         jsonData['active'],
         jsonData['description'],
-        jsonData['global_unit_denomination'],
-        jsonData['custom_unit_denomination'],
+        guid,
+        cuid,
         Entry.decodeMany(jsonData['entries'])
       );
       callback(null, transaction);
