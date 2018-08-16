@@ -55,13 +55,12 @@ class TestTransactionOperations extends TestAccountOperations {
     const txDesc = "Test transaction created in Amatino JS test suite";
     const promise = new Promise((resolve, reject) => {
       try {
-        Transaction.create(
+        Transaction.createWithGlobalUnit(
           self.session,
           self.entity,
           (new Date(new Date().getTime() - 60*24*60000)),
           txDesc,
           5,
-          null,
           [
             new Entry(Side.debit, '', self._assetAccount, "420"),
             new Entry(Side.credit, '', self._revenueAccount, "420")

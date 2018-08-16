@@ -130,8 +130,56 @@ class Transaction {
     
 		return;
 	}
+  
+	static createWithGlobalUnit(
+    session,
+    entity,
+    transactionTime,
+    description,
+    globalUnitId,
+    entries,
+    callback
+  ) {
+    
+    Transaction._create(
+      session,
+      entity,
+      transactionTime,
+      description,
+      globalUnitId,
+      null,
+      entries,
+      callback
+    )
+
+		return;
+	}
+  
+	static createWithCustomUnit(
+    session,
+    entity,
+    transactionTime,
+    description,
+    customUnitId,
+    entries,
+    callback
+  ) {
+    
+    Transaction._create(
+      session,
+      entity,
+      transactionTime,
+      description,
+      null,
+      customUnitId,
+      entries,
+      callback
+    )
+
+		return;
+	}
 	
-	static create(
+	static _create(
     session,
     entity,
     transactionTime,
