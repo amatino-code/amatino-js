@@ -90,8 +90,103 @@ class TestTransactionOperations extends TestAccountOperations {
               reject(Error("Author id missing")); return;
             }
             self._createdTransaction = transaction;
-            resolve(); return;
+            resolve(transaction); return;
         });
+      } catch(error) {
+        reject(error); return;
+      }
+    });
+    return promise;
+  }
+  
+  _retrieveTransaction() {
+    const self = this;
+    const promise = new Promise((resolve, reject) => {
+      try {
+        Transaction.retrieve(
+          self.session,
+          self.entity,
+          self._createdTransaction.id,
+          (error, transaction) => {
+            if (error != null) { reject(error); return; }
+            const original = self._createdTransaction;
+            if (transaction.description != original.description) {
+              reject(Error("TX descriptions don't match")); return;
+            }
+            if (transaction.id != original.id) {
+              reject(Error("TX ids don't match")); return;
+            }
+            resolve(); return;
+          }
+        );
+      } catch(error) {
+        reject(error); return;
+      }
+    });
+    return promise;
+  }
+  
+  _updateTransaction() {
+    const self = this;
+    const updatedDescription = "Updated test transaction";
+    const updatedAmount = "540.12";
+    const promise = new Promise((resolve, reject) => {
+      try {
+        this._createdTransaction.update(
+          self._createdTransaction.transactionTime,
+          updatedDescription,
+          self._createdTransaction.globalUnitId,
+          self._createdTransaction.customUnitId,
+          [
+            new Entry(
+              Side.debit,
+              '',
+              self._assetAccount,
+              updatedAmount
+            ),
+            new Entry(
+              Side.credit,
+              '',
+              self._revenueAccount,
+              updatedAmount
+            )
+          ],
+          (error, transaction) => {
+            if (error != null) { reject(error); return; }
+            if (transaction.description != updatedDescription) {
+              let errorText = "Transaction description does not match ";
+              errorText += "that specified: " + transaction.description;
+              reject(Error(errorText)); return;
+            }
+            if (transaction.entries[0].amount != updatedAmount) {
+              let errorText = "Transaction entry amount does not ";
+              errorText += "that specified: ";
+              errorText += transaction.entries[0].amount;
+              reject(Error(errorText)); return;
+            }
+            resolve();
+            return;
+          }
+        );
+      } catch(error) {
+        reject(error); return;
+      }
+    });
+    return promise;
+  }
+  
+  _deleteTransaction() {
+    const self = this;
+    const promise = new Promise((resolve, reject) => {
+      try {
+        this._createdTransaction.delete((error, transaction) => {
+            if (error != null) { reject(error); return; }
+            if (transaction.active != false) {
+              reject(Error("Transaction not deactivated")); return;
+            }
+            resolve(); return;
+          }
+        );
       } catch(error) {
         reject(error); return;
       }
@@ -107,6 +202,9 @@ class TestTransactionOperations extends TestAccountOperations {
         .then(() => self.createEntity())
         .then(() => self.createAccounts())
         .then(() => self._createTransaction())
+        .then(() => self._retrieveTransaction())
+        .then(() => self._updateTransaction())
+        .then(() => self._deleteTransaction())
         .catch(error => {self.fail(error); return;})
         .then(() => self.passIfNotFailed())
         .then(resolve);

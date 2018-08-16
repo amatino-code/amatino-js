@@ -104,12 +104,18 @@ class Transaction {
     transactionId,
     callback
   ) {
+    const requestData = [{
+      "transaction_id": transactionId,
+      "global_unit_denomination": null,
+      "custom_unit_denomination": null,
+      "version": null
+    }]
     const _ = new _ApiRequest(
       session,
       Transaction.PATH,
       'GET',
-      null,
-      '?entity_id=' + entity.id + '&transaction_id=' + transactionId,
+      requestData,
+      '?entity_id=' + entity.id,
       (error, jsonData) => {
         if (error != null) { callback(error, null); return }
         Transaction._decode(
@@ -124,7 +130,6 @@ class Transaction {
     
 		return;
 	}
-
 	
 	static create(
     session,
@@ -224,12 +229,13 @@ class Transaction {
   /* Thought: `delete` is a reserved word, but it seems to be fine to
    * use it as a method name. */
 	delete(callback) {
-    let urlParameter =  '?entity_id=' + this.entity.id;
-    urlParameters += '&transaction_id' + transactionId;
-    const _ = _ApiRequest(
+    let urlParameters =  '?entity_id=' + this.entity.id;
+    urlParameters += '&transaction_id=' + this.id;
+    const _ = new _ApiRequest(
       this.session,
-      TRANSACTION_PATH,
+      Transaction.PATH,
       'DELETE',
+      null,
       urlParameters,
       (error, jsonData) => {
         if (error != null) { callback(error, null); return }
@@ -272,7 +278,7 @@ class Transaction {
       const transaction = new Transaction(
         session,
         entity,
-        jsonData['transaction_id'],
+        parseInt(jsonData['transaction_id']),
         transactionTime.decodedDate,
         versionTime.decodedDate,
         parseInt(jsonData['version']),
