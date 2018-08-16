@@ -225,7 +225,6 @@ class Account {
         'description': description,
         'colour': colour
       }]
-      console.log(jsonData);
       const _ = new _ApiRequest(
         this.session,
         Account.PATH,
@@ -237,8 +236,8 @@ class Account {
           Account._decode(
             jsonData[0],
             callback,
-            session,
-            entity
+            this._session,
+            this._entity
           );
         }
       );

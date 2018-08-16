@@ -147,6 +147,7 @@ class TestAccountOperations extends Test {
               if (account.description != newDescription) {
                 reject(Error('description not updated')); return;
               }
+              console.log(account);
               resolve(); return;
             }
           );
