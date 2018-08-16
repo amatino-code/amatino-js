@@ -8,11 +8,11 @@ Amatino gives you a full set of tools to store, organise and retrieve financial 
 
 ## Under construction
 
-Right now, the Amatino API offers a full range of accounting services via HTTP requests. However, this Amatino JS library is in an 'Alpha' state. Its capabilities are limited. One class is available: `AmatinoAlpha`.
+Right now, the Amatino API offers a full range of accounting services via HTTP requests. However, this Amatino JS library is under construction. Its capabilities are limited to a subset of Amatino services.
 
-`AmatinoAlpha` is a thin wrapper around asynchronous HTTP requests to the Amatino API. It facilitates testing and experimentation with the Amatino API without having to resort to raw HTTP request manipulation and HMAC computation.
+To facilitate the use of those services not yet supported, Amatino JS includes the `AmatinoAlpha` class. `AmatinoAlpha` is a thin wrapper around asynchronous HTTP requests to the Amatino API. It facilitates testing and experimentation with the Amatino API without having to resort to raw HTTP request manipulation and HMAC computation.
 
-Amatino JS will eventually offer expressive, object-oriented interfaces for all Amatino API services. To be notified when Amatino JS enters a Beta state, with all capabilities available, sign up to the [Amatino Development Newsletter](https://amatino.io/newsletter).
+Amatino JS will eventually offer expressive, object-oriented interfaces for all Amatino API services. To be notified when Amatino JS enters a Beta state, with all capabilities available, sign up to the [Amatino Development Newsletter](https://amatino.io/newsletter) or follow [@AmatinoAPI](https://twitter.com/amatinoapi) on Twitter.
 
 In the mean time, you may wish to review [Amatino's HTTP documentation](https://amatino.io/documentation) to see what capabilities you can expect from Amatino JS in the future.
 
@@ -26,9 +26,78 @@ $ npm install amatino
 
 To use Amatino JS, you will need an active Amatino subscription. You can start a free trial at [https://amatino.io/subscribe](https://amatino.io/subscribe).
 
+## Documentation
+
+Amatino JS is [documented via its GitHub Wiki](https://github.com/amatino-code/amatino-js/wiki/Documentation). Each class entry includes comprehensive description of properties and methods, and examples of their usage. For example, check out the [Entity class](https://github.com/amatino-code/amatino-js/wiki/Entity).
+
 ## Example Usage
 
-The ````AmatinoAlpha```` object allows you to use the Amatino API without dealing with raw HTTP requests or HMACs. It lacks the expressive syntax, input validation, and error handling that Amatino JS will have in the beta stage.
+All interactions with Amatino start with a [Session](https://github.com/amatino-code/amatino-js/wiki/Session). Creating a Session is analogous to 'logging in' to the service. We create a Session like so:
+
+```javascript
+const _ = Session.createWithEmail(
+  "clever@cookie.com",
+  "high entropy passphrase",
+  (error, session) => {
+    console.log(session.userId) // E.g. logs "46892412"
+});
+```
+
+We can then use that Session to utilise Amatino services. For example, we can create an [Entity](https://github.com/amatino-code/amatino-js/wiki/Entity). Entities are objects, beings, and constructs that we wish to describe with financial information. For example, companies, people, or projects.
+
+```javascript
+const _ = Entity.create(
+  session, // from the Session.createWithEmail() example above
+  "My First Entity",
+  "Cayman Islands holding company",
+  null,
+  (error, entity) => {
+    console.log(entity.name) // Logs "My First Entity"
+});
+```
+
+Within Entities, we structure financial information into [Accounts](https://github.com/amatino-code/amatino-js/wiki/Account). For example, a bank account, revenue from sales of goods and services, a credit card, or shareholder equity.
+
+```javascript
+const _ = Account.createWithGlobalUnitDenomination(
+  session,
+  entity, // from the Entity.create() example above
+  "Subscription income",
+  Type.revenue,
+  null,
+  5, // Happens to be the ID for U.S. Dollars
+  null,
+  "Sweet loot from accounting software subscriptions",
+  null,
+  (error, account) => {
+    console.log(account.name) // Logs 'Subscription income'
+]);
+```
+
+We can then store [Transactions](https://github.com/amatino-code/amatino-js/wiki/Transaction): Exchanges of value between Accounts. 
+
+```javascript
+Transaction.create(
+  session,
+  entity,
+  new Date(),
+  "Recognition receipt of sweet loot",
+  5,
+  null,
+  [
+    new Entry(Side.credit, '', subscriptionRevenue, "420"),
+    new Entry(Side.debit, '', customerDeposits, "42"),
+    new Entry(Side.debit, '', cash, "388")
+  ],
+  (error, transaction) => {
+    console.log("Stored " + transaction.description);
+  }
+);
+```
+
+Objects such as Balances, Recursive Ledgers, Positions, and Trees then provide you with powerful tools to manipulate and retrieve financial data.  Those and other objects are not yet available in Amatino JS (We're racing to add them as soon as possible).
+
+In the mean time, the `AmatinoAlpha` object allows you to experiment with as-yet unsupported services without dealing with raw HTTP requests or HMACs. It lacks the expressive syntax, input validation, and error handling that characterise supported objects such as [Transaction](https://github.com/amatino-code/amatino-js/wiki/Transaction).
 
 Initialise an  `AmatinoAlpha` instance like so:
 
@@ -44,7 +113,7 @@ let _ = Amatino.AmatinoAlpha.createWithEmail(
 );
 ````
 
-Request may then be made like so:
+Requests may then be made like so:
 
 ````javascript
 let _ = amatinoAlpha.request(
@@ -113,4 +182,5 @@ Pull requests, comments, issues, forking, and so on are also [most welcome on Gi
 ## Get in contact
 
 To quickly speak to a human about Amatino, [email hugh@amatino.io](mailto:hugh@amatino.io) or [yell at him on Twitter (@hugh_jeremy)](https://twitter.com/hugh_jeremy).
+
 
