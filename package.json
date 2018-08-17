@@ -1,6 +1,6 @@
 {
   "name": "amatino",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Javascript Node.js bindings library for the Amatino API - Double entry accounting as a service",
   "main": "index.js",
   "scripts": {
