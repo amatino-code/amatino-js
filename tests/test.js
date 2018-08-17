@@ -49,6 +49,10 @@ class Test {
   secret() {return this._secret;}
   userId() {return this._userId;}
   email() {return this._email;}
+  get secret() {return this._secret;}
+  get userId() {return this._userId;}
+  get email() {return this._email;}
+  
   
   didFinish() {
     if (this._didPass == null) {
@@ -70,6 +74,11 @@ class Test {
     this._hint = hint;
     return;
   }
+  
+  passIfNotFailed(hint=null) {
+    if (!this.didFinish()) { this.pass(hint); }
+    return;
+  }
 
   report() {
     if (this._didPass == null) {throw 'Test never passed or failed'};
@@ -81,25 +90,36 @@ class Test {
     }
     report += this._description;
     if (this._hint == null) {return report};
+    if (this._hint.stack) {
+      report += '\n' + this._hint.stack;
+      return report;
+    }
     report += '\n       ' + this._hint;
     return report;
   }
   
   stage(executionFunction) {
     return new Promise(resolve => {
-      let _ = AmatinoAlpha.createWithEmail(
-        this.email(),
-        this.secret(),
-        (error, alpha) => {
-          if (error != null) {
-            this.fail('Error: ' + error);
-            resolve();
+      try {
+        let _ = AmatinoAlpha.createWithEmail(
+          this.email,
+          this.secret,
+          (error, alpha) => {
+            if (error != null) {
+              this.fail('Error: ' + error);
+              resolve();
+              return;
+            }
+            executionFunction(alpha, resolve);
             return;
           }
-          executionFunction(alpha, resolve);
-          return;
-        }
-      );
+        );
+      } catch(error) {
+        this.fail(error);
+        resolve();
+        return;  
+      }
+    
     });
   }
 }

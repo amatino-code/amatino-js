@@ -18,30 +18,36 @@ class TestAlphaInitialise extends Test {
   execute() {
 
     return new Promise(resolve => {
-      let _ = AmatinoAlpha.createWithEmail(
-        this.email(),
-        this.secret(),
-        (error, alpha) => {
-          if (error != null) {
-            this.fail('Error: ' + error);
+      try {
+        let _ = AmatinoAlpha.createWithEmail(
+          this.email,
+          this.secret,
+          (error, alpha) => {
+            if (error != null) {
+              this.fail('Error: ' + error);
+              resolve();
+              return;
+            }
+            if (!alpha) {
+              this.fail('Alpha is falsey: ' + alpha);
+              resolve();
+              return;
+            }
+            if (!alpha.request) {
+              this.fail('Alpha missing expected attributes');
+              resolve();
+              return;
+            }
+            this.pass();
             resolve();
             return;
           }
-          if (!alpha) {
-            this.fail('Alpha is falsey: ' + alpha);
-            resolve();
-            return;
-          }
-          if (!alpha.request) {
-            this.fail('Alpha missing expected attributes');
-            resolve();
-            return;
-          }
-          this.pass();
-          resolve();
-          return;
-        }
-      );
+        );
+      } catch(error) {
+        this.fail(error);
+        resolve();
+        return;
+      }
     });
     
     

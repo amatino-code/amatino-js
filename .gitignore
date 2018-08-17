@@ -64,3 +64,4 @@ typings/
 project.geany
 
 exportTestUser.sh
+package-lock.json
