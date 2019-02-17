@@ -4,7 +4,8 @@
   "description": "Javascript Node.js bindings library for the Amatino API - Double entry accounting as a service",
   "main": "index.js",
   "scripts": {
-    "test": "node tests/run.js"
+    "test": "node tests/run.js",
+    "postinstall": "node source/tools/enforce_version.js"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,8 @@
   "bugs": {
     "url": "https://github.com/Amatino-Code/amatino-js/issues"
   },
-  "homepage": "https://amatino.io"
+  "homepage": "https://amatino.io",
+  "engines": {
+    "node": ">=10.4"
+  }
 }
