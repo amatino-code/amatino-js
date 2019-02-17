@@ -8,13 +8,12 @@
 const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
 const HTTPS = require('https');
 const API_HOSTNAME = "api.amatino.io"
-const USER_AGENT = 'Amatino Node.js Library 0.0.12';
+const USER_AGENT = 'Amatino Node.js Library 0.0.13';
 const HEADER_SIGNATURE_KEY = 'X-Signature';
 const HEADER_SESSION_KEY = 'X-Session-ID';
 const TIMEOUT_MILLISECONDS = 1000;
-const QUOTE_EXPRESSION = new RegExp(
-  /(?<!")(?<!-)(?<!:)(?<!\.)(\b\d+\b)(?!")(?!:)(?!-)/g
-); // https://regex101.com/r/qVQYA7/2
+const jsonParse = require('./jsonParse.js');
+const jsonSerialise = require('./jsonSerialise.js');
 
 class _ApiRequest {
 
@@ -53,7 +52,6 @@ class _ApiRequest {
       });
       response.on('end', () => {
         if (response.statusCode != 200) {
-            console.log('Error:', response.statusCode, 'path: ', fullPath, 'body:', bodyData, 'responseBody:', responseBody);
             const code = response.statusCode;
             const errorDescription = 'Code: ' + code + ', data: ';
             const error = Error(errorDescription + responseBody);
@@ -62,21 +60,9 @@ class _ApiRequest {
         }
         let responseJson = null;
         try {
-          /* 
-           * While all monetary amounts are transmitted as strings, the
-           * Amatino API makes liberal use of 64-bit integers as
-           * identifiers. For example, User ID's and Session ID's. 
-           * Because JavaScript has no native 64-bit integer support,
-           * these ID's get truncated on JSON parse. No arithmetic is
-           * performed on these identifers so we will convert them to
-           * strings before parsing.
-           * */
-          const quotedBody = responseBody.replace(
-            QUOTE_EXPRESSION,
-            '\"$&\"'
-          );
-          responseJson = JSON.parse(quotedBody);
+          responseJson = jsonParse(responseBody);
         } catch (error) {
+          console.warn(error);
           const errorDescription = 'JSON parse failed. Body: ';
           const amError = Error(errorDescription + responseBody);
           this._callback(amError, null);
@@ -97,7 +83,7 @@ class _ApiRequest {
       return;
     });
 
-    request.write(JSON.stringify(bodyData));
+    request.write(jsonSerialise(bodyData));
     request.end();
     
     return;

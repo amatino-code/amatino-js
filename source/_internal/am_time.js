@@ -33,7 +33,7 @@ class AmatinoTime {
     }
     
     let dateString = '' + date.getUTCFullYear() + '-';
-    dateString += padZero(date.getUTCMonth()) + '-';
+    dateString += padZero(date.getUTCMonth() + 1) + '-';
     dateString += padZero(date.getUTCDate()) + '_';
     dateString += padZero(date.getUTCHours()) + ':';
     dateString += padZero(date.getUTCMinutes()) + ':';

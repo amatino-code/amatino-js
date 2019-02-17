@@ -26,6 +26,8 @@ $ npm install amatino
 
 To use Amatino JS, you will need an active Amatino subscription. You can start a free trial at [https://amatino.io/subscribe](https://amatino.io/subscribe).
 
+Amatino JS requires Node version 10.4 or greater.
+
 ## Documentation
 
 Amatino JS is [documented via its GitHub Wiki](https://github.com/amatino-code/amatino-js/wiki/Documentation). Each class entry includes comprehensive description of properties and methods, and examples of their usage. For example, check out the [Entity class](https://github.com/amatino-code/amatino-js/wiki/Entity).
