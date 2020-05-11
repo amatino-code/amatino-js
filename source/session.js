@@ -66,12 +66,7 @@ class Session {
   signature(bodyData, path) {
     
     const requestTime = Math.floor(new Date() / 1000);
-    let message = null;
-    if (!bodyData) {
-      message = requestTime + path;
-    } else {
-      message = requestTime + path + JSON.stringify(bodyData);
-    }
+    const message = requestTime + path;
 
     const hmac = CRYPTO.createHmac(SIGNATURE_HASH, this._apiKey);
     hmac.update(message, 'utf8');

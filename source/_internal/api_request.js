@@ -8,12 +8,13 @@
 const VALID_METHODS = ['GET', 'PUT', 'PATCH', 'DELETE', 'POST'];
 const HTTPS = require('https');
 const API_HOSTNAME = "api.amatino.io"
-const USER_AGENT = 'Amatino Node.js Library 0.0.13';
+const USER_AGENT = 'Amatino Node.js Library 0.0.15';
 const HEADER_SIGNATURE_KEY = 'X-Signature';
 const HEADER_SESSION_KEY = 'X-Session-ID';
 const TIMEOUT_MILLISECONDS = 1000;
 const jsonParse = require('./jsonParse.js');
 const jsonSerialise = require('./jsonSerialise.js');
+
 
 class _ApiRequest {
 
@@ -30,45 +31,45 @@ class _ApiRequest {
     
     let fullPathCalc = null;
     if (urlParameters === null) {
-      fullPathCalc = path;
+        fullPathCalc = path;
     } else {
-      fullPathCalc = path + urlParameters;
+        fullPathCalc = path + urlParameters;
     }
     const fullPath = fullPathCalc;
     const headers = this._buildHeaders(session, bodyData, path);
     const requestOptions = {
-      'hostname': API_HOSTNAME,
-      'method': method,
-      'path': fullPath,
-      'headers': headers,
-      'timeout': TIMEOUT_MILLISECONDS
+        'hostname': API_HOSTNAME,
+        'method': method,
+        'path': fullPath,
+        'headers': headers,
+        'timeout': TIMEOUT_MILLISECONDS
     }
     
     const request = HTTPS.request(requestOptions, (response) => {
-      response.setEncoding('utf8');
-      let responseBody = '';
-      response.on('data', (chunk) => {
-        responseBody += chunk;
-      });
-      response.on('end', () => {
-        if (response.statusCode != 200) {
-            const code = response.statusCode;
-            const errorDescription = 'Code: ' + code + ', data: ';
-            const error = Error(errorDescription + responseBody);
-            this._callback(error, null);
-            return;
-        }
-        let responseJson = null;
-        try {
-          responseJson = jsonParse(responseBody);
-        } catch (error) {
-          console.warn(error);
-          const errorDescription = 'JSON parse failed. Body: ';
-          const amError = Error(errorDescription + responseBody);
-          this._callback(amError, null);
-          return;
-        }
-        this._callback(null, responseJson);
+        response.setEncoding('utf8');
+        let responseBody = '';
+        response.on('data', (chunk) => {
+            responseBody += chunk;
+        });
+        response.on('end', () => {
+            if (response.statusCode != 200) {
+                const code = response.statusCode;
+                const errorDescription = 'Code: ' + code + ', data: ';
+                const error = Error(errorDescription + responseBody);
+                this._callback(error, null);
+                return;
+            }
+            let responseJson = null;
+            try {
+                responseJson = jsonParse(responseBody);
+            } catch (error) {
+                console.warn(error);
+                const errorDescription = 'JSON parse failed. Body: ';
+                const amError = Error(errorDescription + responseBody);
+                this._callback(amError, null);
+                return;
+            }
+            this._callback(null, responseJson);
       });
     });
     
